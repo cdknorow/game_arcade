@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Arcade</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: #0a0a0f;
+            color: #e0e0e0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            min-height: 100vh;
+        }
+
+        header {
+            text-align: center;
+            padding: 48px 20px 32px;
+        }
+
+        header h1 {
+            font-size: 3rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            background: linear-gradient(135deg, #ff6b6b, #ffa500, #ffee58);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        header p {
+            margin-top: 12px;
+            color: #888;
+            font-size: 1.1rem;
+        }
+
+        .games {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 32px;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px 32px 64px;
+        }
+
+        .card {
+            background: #16161e;
+            border: 1px solid #2a2a3a;
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.2s, border-color 0.3s, box-shadow 0.3s;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            border-color: #ffa500;
+            box-shadow: 0 8px 30px rgba(255, 165, 0, 0.15);
+        }
+
+        .card canvas {
+            width: 100%;
+            height: 200px;
+            display: block;
+            background: #0e0e16;
+        }
+
+        .card-body {
+            padding: 20px 24px 24px;
+        }
+
+        .card-body h2 {
+            font-size: 1.35rem;
+            margin-bottom: 8px;
+            color: #fff;
+        }
+
+        .card-body p {
+            color: #999;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .play-badge {
+            display: inline-block;
+            margin-top: 14px;
+            padding: 6px 16px;
+            background: rgba(255, 165, 0, 0.15);
+            border: 1px solid rgba(255, 165, 0, 0.4);
+            border-radius: 6px;
+            color: #ffa500;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        @media (max-width: 480px) {
+            header h1 { font-size: 2rem; }
+            .games { padding: 16px; gap: 20px; }
+            .card canvas { height: 160px; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Game Arcade</h1>
+        <p>Pick a game and play — all in your browser</p>
+    </header>
+
+    <div class="games">
+        <a class="card" href="dino_city_destruction/index.html">
+            <canvas id="dino-preview" width="400" height="200"></canvas>
+            <div class="card-body">
+                <h2>Dino City Destruction</h2>
+                <p>Control a dinosaur rampaging through a city. Destroy buildings, fight soldiers and jets.</p>
+                <span class="play-badge">Play Now</span>
+            </div>
+        </a>
+
+        <a class="card" href="wings_of_fire/index.html">
+            <canvas id="wings-preview" width="400" height="200"></canvas>
+            <div class="card-body">
+                <h2>Wings of Fire</h2>
+                <p>Side-scrolling dragon action game. Choose your tribe, fight through 5 biomes, defeat bosses.</p>
+                <span class="play-badge">Play Now</span>
+            </div>
+        </a>
+    </div>
+
+    <script>
+        // --- Dino City preview ---
+        (function () {
+            const c = document.getElementById('dino-preview');
+            const ctx = c.getContext('2d');
+            const W = c.width, H = c.height;
+
+            // sky
+            const sky = ctx.createLinearGradient(0, 0, 0, H);
+            sky.addColorStop(0, '#1a1a2e');
+            sky.addColorStop(1, '#16213e');
+            ctx.fillStyle = sky;
+            ctx.fillRect(0, 0, W, H);
+
+            // stars
+            for (let i = 0; i < 40; i++) {
+                ctx.fillStyle = `rgba(255,255,255,${0.3 + Math.random() * 0.7})`;
+                ctx.fillRect(Math.random() * W, Math.random() * H * 0.6, 1.5, 1.5);
+            }
+
+            // ground
+            ctx.fillStyle = '#2d2d2d';
+            ctx.fillRect(0, H - 40, W, 40);
+            ctx.fillStyle = '#3a3a3a';
+            ctx.fillRect(0, H - 40, W, 2);
+
+            // buildings
+            const colors = ['#334', '#3a3a4a', '#2e3040', '#3d3548'];
+            let bx = 10;
+            while (bx < W - 30) {
+                const bw = 24 + Math.random() * 30;
+                const bh = 50 + Math.random() * 80;
+                ctx.fillStyle = colors[Math.floor(Math.random() * colors.length)];
+                ctx.fillRect(bx, H - 40 - bh, bw, bh);
+                // windows
+                ctx.fillStyle = '#ffee58';
+                for (let wy = H - 40 - bh + 8; wy < H - 48; wy += 14) {
+                    for (let wx = bx + 5; wx < bx + bw - 5; wx += 10) {
+                        if (Math.random() > 0.3) {
+                            ctx.globalAlpha = 0.6 + Math.random() * 0.4;
+                            ctx.fillRect(wx, wy, 4, 6);
+                        }
+                    }
+                }
+                ctx.globalAlpha = 1;
+                bx += bw + 6 + Math.random() * 12;
+            }
+
+            // dino silhouette
+            const dx = 170, dy = H - 40;
+            ctx.fillStyle = '#4caf50';
+            // body
+            ctx.fillRect(dx, dy - 48, 28, 28);
+            // head
+            ctx.fillRect(dx + 22, dy - 56, 18, 18);
+            // jaw
+            ctx.fillRect(dx + 30, dy - 42, 14, 6);
+            // legs
+            ctx.fillRect(dx + 4, dy - 22, 8, 22);
+            ctx.fillRect(dx + 18, dy - 22, 8, 22);
+            // tail
+            ctx.fillRect(dx - 18, dy - 42, 20, 10);
+            ctx.fillRect(dx - 28, dy - 36, 12, 8);
+            // eye
+            ctx.fillStyle = '#ff1744';
+            ctx.fillRect(dx + 32, dy - 54, 4, 4);
+
+            // fire breath particles
+            ctx.fillStyle = '#ff6b6b';
+            for (let i = 0; i < 8; i++) {
+                const fx = dx + 44 + i * 8 + Math.random() * 6;
+                const fy = dy - 46 + Math.random() * 12 - 6;
+                const fs = 3 + Math.random() * 4;
+                ctx.globalAlpha = 0.7 - i * 0.07;
+                ctx.fillRect(fx, fy, fs, fs);
+            }
+            ctx.globalAlpha = 1;
+
+            // explosion on a building
+            const ex = 300, ey = H - 90;
+            for (let i = 0; i < 12; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const dist = Math.random() * 20;
+                const ps = 2 + Math.random() * 4;
+                ctx.fillStyle = ['#ff6b6b', '#ffa500', '#ffee58'][Math.floor(Math.random() * 3)];
+                ctx.globalAlpha = 0.5 + Math.random() * 0.5;
+                ctx.fillRect(ex + Math.cos(angle) * dist, ey + Math.sin(angle) * dist, ps, ps);
+            }
+            ctx.globalAlpha = 1;
+        })();
+
+        // --- Wings of Fire preview ---
+        (function () {
+            const c = document.getElementById('wings-preview');
+            const ctx = c.getContext('2d');
+            const W = c.width, H = c.height;
+
+            // sky gradient
+            const sky = ctx.createLinearGradient(0, 0, 0, H);
+            sky.addColorStop(0, '#0f0c29');
+            sky.addColorStop(0.5, '#302b63');
+            sky.addColorStop(1, '#24243e');
+            ctx.fillStyle = sky;
+            ctx.fillRect(0, 0, W, H);
+
+            // clouds
+            ctx.fillStyle = 'rgba(255,255,255,0.06)';
+            [[60, 40, 80, 24], [200, 70, 100, 20], [320, 30, 60, 16]].forEach(([x, y, w, h]) => {
+                ctx.beginPath();
+                ctx.ellipse(x, y, w, h, 0, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            // mountains
+            ctx.fillStyle = '#1a1832';
+            ctx.beginPath();
+            ctx.moveTo(0, H);
+            ctx.lineTo(0, 140); ctx.lineTo(60, 100); ctx.lineTo(120, 130);
+            ctx.lineTo(180, 80); ctx.lineTo(240, 120); ctx.lineTo(300, 90);
+            ctx.lineTo(360, 110); ctx.lineTo(W, 130); ctx.lineTo(W, H);
+            ctx.fill();
+
+            ctx.fillStyle = '#12102a';
+            ctx.beginPath();
+            ctx.moveTo(0, H);
+            ctx.lineTo(0, 160); ctx.lineTo(80, 140); ctx.lineTo(150, 155);
+            ctx.lineTo(220, 130); ctx.lineTo(290, 150); ctx.lineTo(370, 140);
+            ctx.lineTo(W, 155); ctx.lineTo(W, H);
+            ctx.fill();
+
+            // ground
+            ctx.fillStyle = '#1e5631';
+            ctx.fillRect(0, H - 30, W, 30);
+            ctx.fillStyle = '#2d7a45';
+            ctx.fillRect(0, H - 30, W, 3);
+
+            // draw dragon
+            const dx = 140, dy = 80;
+            ctx.save();
+
+            // wings
+            ctx.fillStyle = '#c62828';
+            ctx.beginPath();
+            ctx.moveTo(dx, dy);
+            ctx.lineTo(dx - 40, dy - 30);
+            ctx.lineTo(dx - 30, dy - 10);
+            ctx.lineTo(dx - 15, dy + 5);
+            ctx.closePath();
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.moveTo(dx + 10, dy);
+            ctx.lineTo(dx + 50, dy - 28);
+            ctx.lineTo(dx + 40, dy - 8);
+            ctx.lineTo(dx + 25, dy + 5);
+            ctx.closePath();
+            ctx.fill();
+
+            // body
+            ctx.fillStyle = '#e53935';
+            ctx.fillRect(dx - 4, dy - 6, 20, 14);
+            // head
+            ctx.fillRect(dx + 16, dy - 8, 12, 12);
+            // snout
+            ctx.fillRect(dx + 26, dy - 4, 8, 6);
+            // tail
+            ctx.fillRect(dx - 16, dy - 2, 14, 8);
+            ctx.fillRect(dx - 24, dy, 10, 6);
+            // eye
+            ctx.fillStyle = '#ffee58';
+            ctx.fillRect(dx + 22, dy - 6, 3, 3);
+
+            // fire breath
+            for (let i = 0; i < 10; i++) {
+                const fx = dx + 34 + i * 7 + Math.random() * 4;
+                const fy = dy - 2 + Math.random() * 8 - 4;
+                const fs = 2 + Math.random() * 5;
+                ctx.fillStyle = ['#ff6b6b', '#ffa500', '#ffee58'][Math.floor(Math.random() * 3)];
+                ctx.globalAlpha = 0.8 - i * 0.06;
+                ctx.fillRect(fx, fy, fs, fs);
+            }
+            ctx.globalAlpha = 1;
+            ctx.restore();
+
+            // small enemy dragons
+            [[300, 60], [340, 100], [280, 120]].forEach(([ex, ey]) => {
+                ctx.fillStyle = '#555';
+                ctx.fillRect(ex, ey, 12, 8);
+                ctx.fillRect(ex + 10, ey - 1, 7, 6);
+                ctx.fillRect(ex - 6, ey + 1, 8, 5);
+                ctx.fillStyle = '#7c4dff';
+                ctx.fillRect(ex - 2, ey - 6, 8, 7);
+                ctx.fillRect(ex + 14, ey - 5, 6, 5);
+            });
+
+            // particles / sparks
+            for (let i = 0; i < 15; i++) {
+                ctx.fillStyle = `hsl(${30 + Math.random() * 30}, 100%, ${50 + Math.random() * 30}%)`;
+                ctx.globalAlpha = 0.4 + Math.random() * 0.6;
+                ctx.fillRect(200 + Math.random() * 100, 50 + Math.random() * 80, 2, 2);
+            }
+            ctx.globalAlpha = 1;
+        })();
+    </script>
+</body>
+</html>
