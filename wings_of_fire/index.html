@@ -117,11 +117,10 @@ function buildMenu() {
 class Camera {
     constructor() { this.x = 0; this.y = 0; }
     update(target) {
-        const targetX = target.x - 150;
-        const targetY = Math.min(0, target.y - canvas.height / 2);
+        const targetX = target.x - canvas.width / 2 + target.w / 2;
+        const targetY = target.y - canvas.height / 2 + target.h / 2;
         this.x += (targetX - this.x) * 0.1;
-        this.y += (targetY - this.y) * 0.05;
-        if (this.y > 0) this.y = 0;
+        this.y += (targetY - this.y) * 0.1;
     }
 }
 
@@ -840,6 +839,7 @@ class Dragon {
         this.shootTimer = 0;
         this.frozen = 0;
         this.tripleShotTimer = 0;
+        this.facingRight = true;
 
         this.sprite = createDragonCanvas(type, isEnemy);
         this.wingAngle = 0;
@@ -847,13 +847,15 @@ class Dragon {
 
     shoot() {
         const stats = TRIBE_STATS[this.type] || TRIBE_STATS['Sky'];
-        const px = this.x + this.w;
+        const dir = this.facingRight ? 1 : -1;
+        const px = this.facingRight ? this.x + this.w : this.x;
         const py = this.y + this.h / 2;
         const speed = 10;
+        const baseAngle = this.facingRight ? 0 : Math.PI;
 
         const fireProjectile = (angle) => {
-            const vx = Math.cos(angle) * speed;
-            const vy = Math.sin(angle) * speed;
+            const vx = Math.cos(baseAngle + angle) * speed;
+            const vy = Math.sin(baseAngle + angle) * speed;
             projectiles.push(new Projectile(
                 px, py, vx, vy,
                 this.projColor, 'player',
@@ -863,8 +865,8 @@ class Dragon {
 
         if (this.tripleShotTimer > 0) {
             fireProjectile(0);
-            fireProjectile(15 * Math.PI / 180);
-            fireProjectile(-15 * Math.PI / 180);
+            fireProjectile(dir * 15 * Math.PI / 180);
+            fireProjectile(dir * -15 * Math.PI / 180);
         } else {
             fireProjectile(0);
         }
@@ -885,8 +887,8 @@ class Dragon {
         if (this.isPlayer) {
             if (keys['ArrowUp'] || keys['w']) this.vy -= this.speed;
             if (keys['ArrowDown'] || keys['s']) this.vy += this.speed;
-            if (keys['ArrowLeft'] || keys['a']) this.vx -= this.speed;
-            if (keys['ArrowRight'] || keys['d']) this.vx += this.speed;
+            if (keys['ArrowLeft'] || keys['a']) { this.vx -= this.speed; this.facingRight = false; }
+            if (keys['ArrowRight'] || keys['d']) { this.vx += this.speed; this.facingRight = true; }
 
             if (keys[' '] && this.shootTimer <= 0) {
                 this.shoot();
@@ -898,6 +900,7 @@ class Dragon {
                 if (dist < 400) {
                     this.vx += (target.x - this.x) * 0.005;
                     this.vy += (target.y - this.y) * 0.005;
+                    this.facingRight = target.x > this.x;
                     if (this.shootTimer <= 0) {
                         const dx = target.x - this.x;
                         const dy = target.y - this.y;
@@ -916,10 +919,12 @@ class Dragon {
             let leader = playerTeam[0];
             if (leader) {
                 let idx = playerTeam.indexOf(this);
-                let targetX = leader.x - 50 - (idx * 30);
+                let followOffset = leader.facingRight ? -50 - (idx * 30) : 50 + (idx * 30);
+                let targetX = leader.x + followOffset;
                 let targetY = leader.y + (idx % 2 === 0 ? -30 : 30);
                 this.vx += (targetX - this.x) * 0.02;
                 this.vy += (targetY - this.y) * 0.02;
+                this.facingRight = leader.facingRight;
                 // Allies also shoot nearby enemies
                 if (this.shootTimer <= 0) {
                     for (let e of enemies) {
@@ -965,8 +970,10 @@ class Dragon {
         const sy = this.y - camera.y;
 
         ctx.save();
-        ctx.translate(sx, sy);
+        ctx.translate(sx + this.w / 2, sy + this.h / 2);
+        if (!this.facingRight) ctx.scale(-1, 1);
         ctx.rotate(this.vy * 0.05);
+        ctx.translate(-this.w / 2, -this.h / 2);
         const flapSpeed = 0.1 + (Math.abs(this.vx) + Math.abs(this.vy)) * 0.05;
         this.wingAngle = Math.sin(Date.now() * flapSpeed) * 15;
 
