@@ -326,6 +326,272 @@ canvas {
   .mode-grid { flex-direction: column; }
   .mode-card { width: 220px; }
 }
+
+/* ============================================
+   MOB BUILDER
+   ============================================ */
+#mobBuilder {
+  background: linear-gradient(180deg, #1a1a2e 0%, #0f2040 100%);
+  z-index: 20;
+  padding: 20px;
+  overflow-y: auto;
+}
+#mobBuilder.hidden { display: none; }
+
+.mb-builder-title {
+  font-size: clamp(0.7rem, 2vw, 1rem);
+  color: var(--color-gold);
+  text-shadow: 3px 3px 0 var(--color-black);
+  margin-bottom: 20px;
+  z-index: 1;
+}
+
+.mob-builder-layout {
+  display: flex;
+  gap: 24px;
+  max-width: 1100px;
+  width: 95%;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* --- Pixel Art Editor --- */
+.mb-editor {
+  background: var(--color-bg-medium);
+  border: 3px solid var(--color-gray-dark);
+  padding: 16px;
+  box-shadow: 3px 3px 0 var(--color-black);
+  flex-shrink: 0;
+}
+
+.mb-section-title {
+  font-size: 0.5rem;
+  color: var(--color-accent);
+  margin-bottom: 12px;
+  text-shadow: 1px 1px 0 var(--color-black);
+}
+
+.mb-canvas-wrap {
+  position: relative;
+  margin-bottom: 12px;
+  background: #000;
+  border: 2px solid #333;
+  line-height: 0;
+}
+
+#mobPixelCanvas {
+  cursor: crosshair;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+/* Color picker row */
+.mb-colors {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+  align-items: center;
+}
+
+.mb-color-swatch {
+  width: 22px;
+  height: 22px;
+  border: 2px solid #333;
+  cursor: pointer;
+  transition: transform 0.1s, border-color 0.15s;
+}
+.mb-color-swatch:hover { transform: scale(1.15); }
+.mb-color-swatch.selected {
+  border-color: var(--color-white);
+  box-shadow: 0 0 6px rgba(255,255,255,0.4);
+  transform: scale(1.15);
+}
+
+#mbCustomColor {
+  width: 26px;
+  height: 26px;
+  border: 2px solid var(--color-gray-dark);
+  background: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.mb-tools {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.mb-tool-btn {
+  font-family: var(--font-pixel);
+  font-size: 0.35rem;
+  padding: 6px 10px;
+  background: var(--color-bg-medium);
+  color: var(--color-white);
+  border: 2px solid var(--color-gray-dark);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  box-shadow: 2px 2px 0 var(--color-black);
+}
+.mb-tool-btn:hover { border-color: var(--color-accent); }
+.mb-tool-btn.active {
+  border-color: var(--color-gold);
+  background: rgba(245,197,66,0.15);
+}
+
+/* --- Settings Panel --- */
+.mb-settings {
+  background: var(--color-bg-medium);
+  border: 3px solid var(--color-gray-dark);
+  padding: 16px;
+  box-shadow: 3px 3px 0 var(--color-black);
+  min-width: 240px;
+  flex: 1;
+  max-width: 300px;
+}
+
+.mb-field { margin-bottom: 12px; }
+
+.mb-label {
+  display: block;
+  font-size: 0.35rem;
+  color: var(--color-gray);
+  margin-bottom: 5px;
+}
+
+.mb-input {
+  font-family: var(--font-pixel);
+  font-size: 0.38rem;
+  width: 100%;
+  padding: 7px;
+  background: #0a0a1a;
+  color: var(--color-white);
+  border: 2px solid var(--color-gray-dark);
+  outline: none;
+}
+.mb-input:focus { border-color: var(--color-accent); }
+
+.mb-select {
+  font-family: var(--font-pixel);
+  font-size: 0.38rem;
+  width: 100%;
+  padding: 7px;
+  background: #0a0a1a;
+  color: var(--color-white);
+  border: 2px solid var(--color-gray-dark);
+  outline: none;
+  cursor: pointer;
+}
+.mb-select:focus { border-color: var(--color-accent); }
+.mb-select option { background: #0a0a1a; }
+
+.mb-range-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.mb-range { flex: 1; accent-color: var(--color-accent); }
+.mb-range-val {
+  font-size: 0.4rem;
+  color: var(--color-gold);
+  min-width: 22px;
+  text-align: center;
+}
+
+/* --- Preview Panel --- */
+.mb-preview-panel {
+  background: var(--color-bg-medium);
+  border: 3px solid var(--color-gray-dark);
+  padding: 16px;
+  box-shadow: 3px 3px 0 var(--color-black);
+  text-align: center;
+  min-width: 180px;
+}
+
+.mb-preview-box {
+  width: 128px;
+  height: 128px;
+  margin: 0 auto 12px;
+  background: #0a0a1a;
+  border: 2px solid #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+#mobPreviewCanvas {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+.mb-preview-stats {
+  font-size: 0.32rem;
+  color: var(--color-gray);
+  line-height: 2.2;
+  text-align: left;
+}
+.mb-preview-stats span { color: var(--color-accent); }
+
+/* --- My Mobs List --- */
+.mb-mobs-list {
+  background: var(--color-bg-medium);
+  border: 3px solid var(--color-gray-dark);
+  padding: 16px;
+  box-shadow: 3px 3px 0 var(--color-black);
+  width: 100%;
+  max-width: 1100px;
+  margin-top: 16px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.mb-mob-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px;
+  border-bottom: 1px solid #222;
+}
+.mb-mob-row:last-child { border-bottom: none; }
+
+.mb-mob-thumb {
+  width: 32px;
+  height: 32px;
+  background: #0a0a1a;
+  image-rendering: pixelated;
+  flex-shrink: 0;
+}
+
+.mb-mob-info {
+  flex: 1;
+  font-size: 0.32rem;
+  color: var(--color-white);
+  line-height: 1.8;
+}
+.mb-mob-info .mob-type-tag {
+  font-size: 0.28rem;
+  color: var(--color-gray);
+}
+
+.mb-mob-actions { display: flex; gap: 6px; }
+
+.mb-empty-msg {
+  font-size: 0.35rem;
+  color: var(--color-gray);
+  text-align: center;
+  padding: 16px;
+}
+
+.mb-bottom-btns {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+  justify-content: center;
+  width: 100%;
+}
 </style>
 </head>
 <body>
@@ -379,6 +645,130 @@ canvas {
   <h2>You Were Defeated!</h2>
   <p>Don't worry — every great explorer<br>gets knocked down sometimes!<br>Your inventory is safe.</p>
   <button class="menu-btn gold" onclick="respawnPlayer()">Try Again</button>
+</div>
+
+<!-- ===== MOB BUILDER ===== -->
+<div id="mobBuilder" class="overlay hidden">
+  <h2 class="mb-builder-title">Mob Builder</h2>
+  <div class="mob-builder-layout">
+
+    <!-- Pixel Art Editor -->
+    <div class="mb-editor">
+      <div class="mb-section-title">Draw Your Mob</div>
+      <div class="mb-canvas-wrap">
+        <canvas id="mobPixelCanvas" width="256" height="256"></canvas>
+      </div>
+      <div class="mb-colors" id="mbColorPalette"></div>
+      <div class="mb-tools">
+        <button class="mb-tool-btn active" data-tool="paint" onclick="mbSetTool('paint')">Paint</button>
+        <button class="mb-tool-btn" data-tool="erase" onclick="mbSetTool('erase')">Erase</button>
+        <button class="mb-tool-btn" data-tool="fill" onclick="mbSetTool('fill')">Fill</button>
+        <button class="mb-tool-btn" onclick="mbClearCanvas()">Clear</button>
+      </div>
+    </div>
+
+    <!-- Settings Panel -->
+    <div class="mb-settings">
+      <div class="mb-section-title">Mob Settings</div>
+      <div class="mb-field">
+        <label class="mb-label">Name</label>
+        <input type="text" class="mb-input" id="mbName" placeholder="My Cool Mob" maxlength="20">
+      </div>
+      <div class="mb-field">
+        <label class="mb-label">Type</label>
+        <select class="mb-select" id="mbType">
+          <option value="ground">Ground (walks)</option>
+          <option value="flying">Flying (floats)</option>
+          <option value="water">Water (swims)</option>
+        </select>
+      </div>
+      <div class="mb-field">
+        <label class="mb-label">Behavior</label>
+        <select class="mb-select" id="mbBehavior">
+          <option value="patrol">Patrol (walks back & forth)</option>
+          <option value="chase">Chase (runs at player)</option>
+        </select>
+      </div>
+      <div class="mb-field">
+        <label class="mb-label">HP: <span class="mb-range-val" id="mbHpVal">3</span></label>
+        <div class="mb-range-wrap">
+          <input type="range" class="mb-range" id="mbHp" min="1" max="20" value="3"
+            oninput="document.getElementById('mbHpVal').textContent=this.value; mbUpdatePreview()">
+        </div>
+      </div>
+      <div class="mb-field">
+        <label class="mb-label">Damage: <span class="mb-range-val" id="mbDmgVal">1</span></label>
+        <div class="mb-range-wrap">
+          <input type="range" class="mb-range" id="mbDmg" min="1" max="5" value="1"
+            oninput="document.getElementById('mbDmgVal').textContent=this.value; mbUpdatePreview()">
+        </div>
+      </div>
+      <div class="mb-field">
+        <label class="mb-label">Speed</label>
+        <select class="mb-select" id="mbSpeed" onchange="mbUpdatePreview()">
+          <option value="slow">Slow</option>
+          <option value="medium" selected>Medium</option>
+          <option value="fast">Fast</option>
+        </select>
+      </div>
+      <div class="mb-field">
+        <label class="mb-label">Spawn Rate</label>
+        <select class="mb-select" id="mbSpawnRate" onchange="mbUpdatePreview()">
+          <option value="common">Common</option>
+          <option value="uncommon" selected>Uncommon</option>
+          <option value="rare">Rare</option>
+        </select>
+      </div>
+      <div class="mb-field">
+        <label class="mb-label">Drops on Death</label>
+        <select class="mb-select" id="mbDropBlock" onchange="mbUpdatePreview()">
+          <option value="1">Dirt</option>
+          <option value="2">Stone</option>
+          <option value="3">Moon Rock</option>
+          <option value="4">Wood</option>
+          <option value="6">Sand</option>
+          <option value="19">Gold Block</option>
+          <option value="20">Crystal</option>
+          <option value="17">Marble</option>
+          <option value="18">Obsidian</option>
+        </select>
+      </div>
+      <div class="mb-field">
+        <label class="mb-label">Size: <span class="mb-range-val" id="mbScaleVal">2x</span></label>
+        <div class="mb-range-wrap">
+          <input type="range" class="mb-range" id="mbScale" min="1" max="6" value="2"
+            oninput="document.getElementById('mbScaleVal').textContent=this.value+'x'; mbUpdatePreview()">
+        </div>
+      </div>
+    </div>
+
+    <!-- Preview Panel -->
+    <div class="mb-preview-panel">
+      <div class="mb-section-title">Preview</div>
+      <div class="mb-preview-box">
+        <canvas id="mobPreviewCanvas" width="128" height="128"></canvas>
+      </div>
+      <div class="mb-preview-stats" id="mbPreviewStats">
+        HP: <span>3</span><br>
+        DMG: <span>1</span><br>
+        Speed: <span>Medium</span><br>
+        Type: <span>Ground</span><br>
+        Behavior: <span>Patrol</span>
+      </div>
+      <button class="menu-btn gold" style="margin-top:12px;min-width:160px;font-size:0.45rem;padding:10px 20px" onclick="mbSaveMob()">Save Mob</button>
+    </div>
+  </div>
+
+  <!-- My Mobs List -->
+  <div class="mb-mobs-list" id="mbMobsList">
+    <div class="mb-section-title">My Mobs</div>
+    <div class="mb-empty-msg" id="mbEmptyMsg">No custom mobs yet. Draw one above!</div>
+  </div>
+
+  <!-- Bottom buttons -->
+  <div class="mb-bottom-btns">
+    <button class="menu-btn secondary" style="min-width:160px" onclick="mbClose()">Back to Menu</button>
+  </div>
 </div>
 
 <!-- ===== GAME CANVAS ===== -->
@@ -1001,53 +1391,197 @@ const MOB_TYPES = {
   wither:   { hp: 15, damage: 3, speed: 0.6, width: 28, height: 52, ground: true,  weight: 5 },
 };
 
-function spawnMob() {
-  // Pick a random mob type using weighted probability
-  const totalWeight = Object.values(MOB_TYPES).reduce((s, t) => s + t.weight, 0);
-  let roll = Math.random() * totalWeight;
-  let chosenType = 'crab';
-  for (const [type, def] of Object.entries(MOB_TYPES)) {
-    roll -= def.weight;
-    if (roll <= 0) { chosenType = type; break; }
+// ===== CUSTOM MOB SYSTEM =====
+// Kids can design their own mobs in the Mob Builder UI!
+// Custom mobs are stored in localStorage so they persist between sessions.
+
+let customMobs = [];
+
+// Speed name -> pixels per frame
+const SPEED_VALUES = { slow: 0.6, medium: 1.2, fast: 2.0 };
+// Spawn rate name -> weight
+const SPAWN_RATE_WEIGHTS = { common: 30, uncommon: 15, rare: 5 };
+
+// Load custom mobs from localStorage on startup
+function loadCustomMobs() {
+  try {
+    const saved = localStorage.getItem('blockworld_custom_mobs');
+    if (saved) customMobs = JSON.parse(saved);
+  } catch (e) {
+    customMobs = [];
+  }
+}
+loadCustomMobs();
+
+// Save custom mobs to localStorage
+function persistCustomMobs() {
+  localStorage.setItem('blockworld_custom_mobs', JSON.stringify(customMobs));
+}
+
+// API for the Mob Builder UI
+window.saveCustomMob = function(mobData) {
+  // Generate ID if not provided
+  if (!mobData.id) mobData.id = 'custom_' + Date.now();
+  // Update existing or add new
+  const idx = customMobs.findIndex(m => m.id === mobData.id);
+  if (idx >= 0) customMobs[idx] = mobData;
+  else customMobs.push(mobData);
+  persistCustomMobs();
+  return mobData.id;
+};
+
+window.getCustomMobs = function() {
+  return customMobs.slice(); // Return a copy
+};
+
+window.deleteCustomMob = function(id) {
+  customMobs = customMobs.filter(m => m.id !== id);
+  persistCustomMobs();
+};
+
+// Create a canvas from pixel data for efficient rendering
+// Cache rendered sprites so we don't rebuild every frame
+const customMobSpriteCache = {};
+
+function getCustomMobSprite(mobData) {
+  if (customMobSpriteCache[mobData.id]) return customMobSpriteCache[mobData.id];
+  const gridW = mobData.width || 16;
+  const gridH = mobData.height || 16;
+  const scale = mobData.scale || 2; // Size multiplier from Mob Builder
+  const offscreen = document.createElement('canvas');
+  offscreen.width = gridW * scale;
+  offscreen.height = gridH * scale;
+  const octx = offscreen.getContext('2d');
+
+  if (mobData.pixels) {
+    for (let i = 0; i < mobData.pixels.length; i++) {
+      const px = mobData.pixels[i];
+      if (!px) continue;
+      const gx = i % gridW;
+      const gy = Math.floor(i / gridW);
+      octx.fillStyle = `rgba(${px[0]},${px[1]},${px[2]},${(px[3] ?? 255) / 255})`;
+      octx.fillRect(gx * scale, gy * scale, scale, scale);
+    }
   }
 
-  const def = MOB_TYPES[chosenType];
+  customMobSpriteCache[mobData.id] = offscreen;
+  return offscreen;
+}
+
+// Invalidate sprite cache when a mob is re-saved
+const origSave = window.saveCustomMob;
+window.saveCustomMob = function(mobData) {
+  delete customMobSpriteCache[mobData.id];
+  return origSave(mobData);
+};
+
+function spawnMob() {
+  // Build combined spawn table from built-in + custom mobs
+  const spawnTable = [];
+
+  // Add built-in mobs
+  for (const [type, def] of Object.entries(MOB_TYPES)) {
+    spawnTable.push({ type, weight: def.weight, custom: null });
+  }
+
+  // Add custom mobs
+  for (const cm of customMobs) {
+    const weight = SPAWN_RATE_WEIGHTS[cm.spawnRate] || 15;
+    spawnTable.push({ type: 'custom', weight, custom: cm });
+  }
+
+  // Pick a random entry using weighted probability
+  const totalWeight = spawnTable.reduce((s, t) => s + t.weight, 0);
+  let roll = Math.random() * totalWeight;
+  let chosen = spawnTable[0];
+  for (const entry of spawnTable) {
+    roll -= entry.weight;
+    if (roll <= 0) { chosen = entry; break; }
+  }
+
   const side = Math.random() < 0.5 ? -1 : 1;
   const spawnX = (camera.x + (side > 0 ? canvas.width + 80 : -80)) / TILE_SIZE;
   const tileX = Math.floor(Math.max(2, Math.min(spawnX, WORLD_WIDTH - 3)));
   const surfaceY = findSurface(tileX);
 
-  const mob = {
-    x: tileX * TILE_SIZE,
-    y: 0,
-    width: def.width,
-    height: def.height,
-    vx: (Math.random() < 0.5 ? 1 : -1) * def.speed,
-    vy: 0,
-    hp: def.hp,
-    maxHp: def.hp,
-    damage: def.damage,
-    type: chosenType,
-    hitTimer: 0,
-    onGround: false,
-    attackTimer: 0,      // Cooldown for ranged attacks
-    swoopPhase: Math.random() * Math.PI * 2,  // For dragon flight pattern
-    facing: side,
-  };
+  let mob;
 
-  // Position based on mob type
-  if (chosenType === 'dragon') {
-    mob.y = (surfaceY - 10 - Math.floor(Math.random() * 5)) * TILE_SIZE;
-  } else if (chosenType === 'shark') {
-    // Find water to spawn in — if no water nearby, cancel spawn
-    let waterY = -1;
-    for (let y = surfaceY - 2; y < surfaceY + 4 && y < WORLD_HEIGHT; y++) {
-      if (y >= 0 && world[y][tileX] === BLOCKS.WATER.id) { waterY = y; break; }
+  if (chosen.custom) {
+    // Spawn a custom mob designed by the kids!
+    const cm = chosen.custom;
+    const speed = SPEED_VALUES[cm.speed] || 1.2;
+    const mobType = cm.type || 'ground';  // 'ground', 'flying', 'water'
+    const mobScale = cm.scale || 2;         // Size multiplier from Mob Builder
+    const spriteW = (cm.width || 16) * mobScale;
+    const spriteH = (cm.height || 16) * mobScale;
+
+    mob = {
+      x: tileX * TILE_SIZE,
+      y: 0,
+      width: spriteW,
+      height: spriteH,
+      vx: (Math.random() < 0.5 ? 1 : -1) * speed,
+      vy: 0,
+      hp: cm.hp || 3,
+      maxHp: cm.hp || 3,
+      damage: cm.damage || 1,
+      type: 'custom',
+      customData: cm,       // Reference to custom mob definition
+      hitTimer: 0,
+      onGround: false,
+      attackTimer: 0,
+      swoopPhase: Math.random() * Math.PI * 2,
+      facing: side,
+    };
+
+    // Position based on custom mob movement type
+    if (mobType === 'flying') {
+      mob.y = (surfaceY - 10 - Math.floor(Math.random() * 5)) * TILE_SIZE;
+    } else if (mobType === 'water') {
+      let waterY = -1;
+      for (let y = surfaceY - 2; y < surfaceY + 4 && y < WORLD_HEIGHT; y++) {
+        if (y >= 0 && world[y][tileX] === BLOCKS.WATER.id) { waterY = y; break; }
+      }
+      if (waterY < 0) return;
+      mob.y = waterY * TILE_SIZE;
+    } else {
+      mob.y = (surfaceY - 2) * TILE_SIZE;
     }
-    if (waterY < 0) return; // No water, skip this spawn
-    mob.y = waterY * TILE_SIZE;
   } else {
-    mob.y = (surfaceY - 2) * TILE_SIZE;
+    // Spawn a built-in mob
+    const chosenType = chosen.type;
+    const def = MOB_TYPES[chosenType];
+
+    mob = {
+      x: tileX * TILE_SIZE,
+      y: 0,
+      width: def.width,
+      height: def.height,
+      vx: (Math.random() < 0.5 ? 1 : -1) * def.speed,
+      vy: 0,
+      hp: def.hp,
+      maxHp: def.hp,
+      damage: def.damage,
+      type: chosenType,
+      hitTimer: 0,
+      onGround: false,
+      attackTimer: 0,
+      swoopPhase: Math.random() * Math.PI * 2,
+      facing: side,
+    };
+
+    if (chosenType === 'dragon') {
+      mob.y = (surfaceY - 10 - Math.floor(Math.random() * 5)) * TILE_SIZE;
+    } else if (chosenType === 'shark') {
+      let waterY = -1;
+      for (let y = surfaceY - 2; y < surfaceY + 4 && y < WORLD_HEIGHT; y++) {
+        if (y >= 0 && world[y][tileX] === BLOCKS.WATER.id) { waterY = y; break; }
+      }
+      if (waterY < 0) return;
+      mob.y = waterY * TILE_SIZE;
+    } else {
+      mob.y = (surfaceY - 2) * TILE_SIZE;
+    }
   }
 
   mobs.push(mob);
@@ -1060,7 +1594,9 @@ function updateMobs(dt) {
     const mob = mobs[i];
 
     // --- Per-type behavior ---
-    if (mob.type === 'dragon') {
+    if (mob.type === 'custom') {
+      updateCustomMob(mob, dt, ms);
+    } else if (mob.type === 'dragon') {
       updateDragon(mob, dt, ms);
     } else if (mob.type === 'shark') {
       updateShark(mob, dt, ms);
@@ -1363,6 +1899,76 @@ function updateWitherAI(mob, dt, ms) {
 }
 
 // --- Projectile system (arrows, fireballs) ---
+// --- Custom mob behavior: maps builder settings to existing AI ---
+function updateCustomMob(mob, dt, ms) {
+  const cm = mob.customData;
+  const movementType = cm.type || 'ground';
+  const behavior = cm.behavior || 'patrol';
+
+  if (movementType === 'flying') {
+    // Fly with periodic swoops so players can hit them with melee
+    mob.swoopPhase += dt * 0.04;
+    mob.facing = mob.vx > 0 ? 1 : -1;
+    const tileX = Math.floor((mob.x + mob.width / 2) / TILE_SIZE);
+    const surfY = findSurface(Math.max(0, Math.min(tileX, WORLD_WIDTH - 1)));
+    // Swoop cycle: ~8 seconds cruise, ~2 seconds low dive (hittable!)
+    const swoopCycle = (mob.swoopPhase * 25) % 600;
+    let targetY;
+    if (swoopCycle > 480) {
+      targetY = (surfY - 2) * TILE_SIZE; // Dive low
+    } else {
+      targetY = (surfY - 5) * TILE_SIZE + Math.sin(mob.swoopPhase) * TILE_SIZE; // Cruise
+    }
+    mob.y += (targetY - mob.y) * 0.06;
+    mob.x += mob.vx * dt;
+    if (mob.y > (surfY - 1.5) * TILE_SIZE) mob.y = (surfY - 1.5) * TILE_SIZE;
+    if (mob.y < 2 * TILE_SIZE) mob.y = 2 * TILE_SIZE;
+    if (mob.x < TILE_SIZE * 2 || mob.x > (WORLD_WIDTH - 3) * TILE_SIZE) {
+      mob.vx = -mob.vx;
+    }
+  } else if (movementType === 'water') {
+    // Use shark-like water swimming
+    updateShark(mob, dt, ms);
+  } else {
+    // Ground movement
+    updateGroundMob(mob, dt, ms);
+  }
+
+  // Apply behavior on top of movement
+  if (behavior === 'chase') {
+    // Move toward player when within 8 blocks
+    const dx = player.x - mob.x;
+    const dist = Math.abs(dx);
+    if (dist < 8 * TILE_SIZE && dist > TILE_SIZE) {
+      const speed = SPEED_VALUES[cm.speed] || 1.2;
+      mob.vx = (dx > 0 ? 1 : -1) * speed * 1.5;
+      mob.facing = dx > 0 ? 1 : -1;
+    }
+  } else if (behavior === 'ranged') {
+    // Shoot projectiles like skeleton
+    mob.attackTimer += ms;
+    const dx = player.x - mob.x;
+    const dy = player.y - mob.y;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+    if (mob.attackTimer > 3000 && dist < 8 * TILE_SIZE && dist > TILE_SIZE) {
+      if (hasLineOfSight(mob.x + mob.width / 2, mob.y + 8, player.x + player.width / 2, player.y + player.height / 2)) {
+        const angle = Math.atan2(dy, dx);
+        mob.attackTimer = 0;
+        projectiles.push({
+          x: mob.x + mob.width / 2,
+          y: mob.y + mob.height / 2,
+          vx: Math.cos(angle) * 4,
+          vy: Math.sin(angle) * 4 - 1,
+          damage: mob.damage,
+          type: 'arrow',
+          life: 2000,
+          owner: 'mob',
+        });
+      }
+    }
+  }
+}
+
 function updateProjectiles(dt) {
   const ms = dt * 16.67;
   for (let i = projectiles.length - 1; i >= 0; i--) {
@@ -1481,7 +2087,11 @@ function playerAttack() {
       // Remove dead mob and drop loot
       if (mob.hp <= 0) {
         // Drop loot based on mob type
-        if (mob.type === 'wither') {
+        if (mob.type === 'custom' && mob.customData) {
+          // Custom mob drops whatever the kid configured
+          const dropId = mob.customData.dropBlockId;
+          if (dropId !== undefined && dropId !== null) addToInventory(dropId);
+        } else if (mob.type === 'wither') {
           // Wither drops obsidian and heals player
           addToInventory(BLOCKS.OBSIDIAN.id);
           if (gameMode === 'survival') player.health = Math.min(player.health + 3, player.maxHealth);
@@ -1854,7 +2464,8 @@ function drawMobs() {
     ctx.save();
     const hit = mob.hitTimer > 0;
 
-    if (mob.type === 'crab') drawCrab(drawX, drawY, mob, hit);
+    if (mob.type === 'custom') drawCustomMob(drawX, drawY, mob, hit);
+    else if (mob.type === 'crab') drawCrab(drawX, drawY, mob, hit);
     else if (mob.type === 'skeleton') drawSkeleton(drawX, drawY, mob, hit);
     else if (mob.type === 'dragon') drawDragon(drawX, drawY, mob, hit);
     else if (mob.type === 'shark') drawShark(drawX, drawY, mob, hit);
@@ -1875,6 +2486,38 @@ function drawMobs() {
 
   // Draw projectiles
   drawProjectiles();
+}
+
+function drawCustomMob(x, y, mob, hit) {
+  const cm = mob.customData;
+  if (!cm) return;
+  const sprite = getCustomMobSprite(cm);
+
+  // Flash red overlay when hit
+  if (hit) {
+    ctx.globalAlpha = 0.5;
+    ctx.fillStyle = '#f44';
+    ctx.fillRect(x, y, mob.width, mob.height);
+    ctx.globalAlpha = 1;
+  }
+
+  // Draw the pixel art sprite, flipped based on facing direction
+  ctx.save();
+  if (mob.facing < 0) {
+    ctx.translate(x + mob.width, y);
+    ctx.scale(-1, 1);
+    ctx.drawImage(sprite, 0, 0, mob.width, mob.height);
+  } else {
+    ctx.drawImage(sprite, x, y, mob.width, mob.height);
+  }
+  ctx.restore();
+
+  // Draw name tag above mob
+  ctx.fillStyle = '#fff';
+  ctx.font = '8px "Press Start 2P", monospace';
+  ctx.textAlign = 'center';
+  ctx.fillText(cm.name || 'Custom', x + mob.width / 2, y - 14);
+  ctx.textAlign = 'left';
 }
 
 function drawCrab(x, y, mob, hit) {
@@ -2260,7 +2903,7 @@ function drawHUD() {
   // --- Physics Stats Toggle hint ---
   ctx.fillStyle = '#555';
   ctx.font = '7px "Press Start 2P", monospace';
-  ctx.fillText('[P] Physics  [ESC] Pause', canvas.width - 280, 18);
+  ctx.fillText('[P] Physics  [M] Spawn Mob  [ESC] Pause', canvas.width - 400, 18);
 }
 
 function drawHeart(x, y, fill, outline) {
@@ -2514,6 +3157,11 @@ document.addEventListener('keydown', (e) => {
   // Toggle physics stats
   if (e.code === 'KeyP') showPhysicsStats = !showPhysicsStats;
 
+  // Spawn a mob manually (M key) — great for testing custom mobs!
+  if (e.code === 'KeyM' && gameRunning && gameMode === 'survival') {
+    spawnMob();
+  }
+
   // Toggle block palette (E key)
   if (e.code === 'KeyE' && gameRunning) {
     showBlockPalette = !showBlockPalette;
@@ -2594,6 +3242,439 @@ window.addEventListener('resize', resizeCanvas);
 
 // Initialize canvas size
 resizeCanvas();
+
+// =============================================================
+// MOB BUILDER — Pixel Art Editor & Settings
+// Design your own mobs and add them to the game!
+// =============================================================
+
+// --- Pixel grid state ---
+const MB_GRID = 16;  // 16x16 pixel grid
+const MB_CELL = 16;  // Each cell is 16px on the editor canvas (16*16=256)
+let mbPixels = [];   // 2D array [y][x] = [r,g,b,a] or null
+let mbCurrentColor = [233, 69, 96, 255]; // Default: red
+let mbCurrentTool = 'paint';
+let mbIsDrawing = false;
+let mbEditingId = null; // Set when editing an existing mob
+
+// Color palette — a nice set of pixel-art colors
+const MB_PALETTE = [
+  [233,69,96],   [255,107,129], [255,183,77],  [255,241,118],
+  [129,199,132], [76,175,80],   [0,150,136],   [79,195,247],
+  [66,165,245],  [92,107,192],  [126,87,194],  [171,71,188],
+  [239,83,80],   [255,255,255], [189,189,189], [117,117,117],
+  [66,66,66],    [33,33,33],    [141,110,99],  [188,143,95],
+];
+
+// --- Initialize the pixel grid ---
+function mbInitGrid() {
+  mbPixels = [];
+  for (let y = 0; y < MB_GRID; y++) {
+    mbPixels[y] = [];
+    for (let x = 0; x < MB_GRID; x++) {
+      mbPixels[y][x] = null;
+    }
+  }
+}
+mbInitGrid();
+
+// --- Build the color palette swatches ---
+function mbBuildPalette() {
+  const container = document.getElementById('mbColorPalette');
+  if (!container) return;
+  container.innerHTML = '';
+  MB_PALETTE.forEach((c, i) => {
+    const swatch = document.createElement('div');
+    swatch.className = 'mb-color-swatch' + (i === 0 ? ' selected' : '');
+    swatch.style.background = `rgb(${c[0]},${c[1]},${c[2]})`;
+    swatch.onclick = () => {
+      mbCurrentColor = [c[0], c[1], c[2], 255];
+      container.querySelectorAll('.mb-color-swatch').forEach(s => s.classList.remove('selected'));
+      swatch.classList.add('selected');
+    };
+    container.appendChild(swatch);
+  });
+  // Custom color picker
+  const picker = document.createElement('input');
+  picker.type = 'color';
+  picker.id = 'mbCustomColor';
+  picker.value = '#e94560';
+  picker.onchange = () => {
+    const hex = picker.value;
+    const r = parseInt(hex.substr(1,2),16);
+    const g = parseInt(hex.substr(3,2),16);
+    const b = parseInt(hex.substr(5,2),16);
+    mbCurrentColor = [r, g, b, 255];
+    container.querySelectorAll('.mb-color-swatch').forEach(s => s.classList.remove('selected'));
+  };
+  container.appendChild(picker);
+}
+
+// --- Draw the pixel editor canvas ---
+function mbDrawEditor() {
+  const canvas = document.getElementById('mobPixelCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Draw pixels
+  for (let y = 0; y < MB_GRID; y++) {
+    for (let x = 0; x < MB_GRID; x++) {
+      const px = mbPixels[y][x];
+      if (px) {
+        ctx.fillStyle = `rgba(${px[0]},${px[1]},${px[2]},${px[3]/255})`;
+        ctx.fillRect(x * MB_CELL, y * MB_CELL, MB_CELL, MB_CELL);
+      }
+    }
+  }
+
+  // Draw grid lines
+  ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+  ctx.lineWidth = 0.5;
+  for (let i = 0; i <= MB_GRID; i++) {
+    ctx.beginPath();
+    ctx.moveTo(i * MB_CELL, 0);
+    ctx.lineTo(i * MB_CELL, canvas.height);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(0, i * MB_CELL);
+    ctx.lineTo(canvas.width, i * MB_CELL);
+    ctx.stroke();
+  }
+}
+
+// --- Canvas mouse events ---
+function mbGetCell(e) {
+  const canvas = document.getElementById('mobPixelCanvas');
+  const rect = canvas.getBoundingClientRect();
+  const scaleX = canvas.width / rect.width;
+  const scaleY = canvas.height / rect.height;
+  const x = Math.floor((e.clientX - rect.left) * scaleX / MB_CELL);
+  const y = Math.floor((e.clientY - rect.top) * scaleY / MB_CELL);
+  return { x, y };
+}
+
+function mbPaintCell(x, y) {
+  if (x < 0 || x >= MB_GRID || y < 0 || y >= MB_GRID) return;
+  if (mbCurrentTool === 'paint') {
+    mbPixels[y][x] = [...mbCurrentColor];
+  } else if (mbCurrentTool === 'erase') {
+    mbPixels[y][x] = null;
+  } else if (mbCurrentTool === 'fill') {
+    mbFloodFill(x, y, mbPixels[y][x], [...mbCurrentColor]);
+  }
+  mbDrawEditor();
+  mbUpdatePreview();
+}
+
+function mbFloodFill(x, y, targetColor, fillColor) {
+  if (x < 0 || x >= MB_GRID || y < 0 || y >= MB_GRID) return;
+  const current = mbPixels[y][x];
+  // Check if current matches target
+  const tStr = targetColor ? targetColor.join(',') : 'null';
+  const cStr = current ? current.join(',') : 'null';
+  const fStr = fillColor.join(',');
+  if (cStr !== tStr || cStr === fStr) return;
+  mbPixels[y][x] = [...fillColor];
+  mbFloodFill(x+1, y, targetColor, fillColor);
+  mbFloodFill(x-1, y, targetColor, fillColor);
+  mbFloodFill(x, y+1, targetColor, fillColor);
+  mbFloodFill(x, y-1, targetColor, fillColor);
+}
+
+// Attach canvas events after DOM is ready
+(function mbAttachCanvasEvents() {
+  const canvas = document.getElementById('mobPixelCanvas');
+  if (!canvas) return;
+  canvas.addEventListener('mousedown', (e) => {
+    e.preventDefault();
+    mbIsDrawing = true;
+    const { x, y } = mbGetCell(e);
+    mbPaintCell(x, y);
+  });
+  canvas.addEventListener('mousemove', (e) => {
+    if (!mbIsDrawing) return;
+    if (mbCurrentTool === 'fill') return; // Don't drag-fill
+    const { x, y } = mbGetCell(e);
+    mbPaintCell(x, y);
+  });
+  canvas.addEventListener('mouseup', () => { mbIsDrawing = false; });
+  canvas.addEventListener('mouseleave', () => { mbIsDrawing = false; });
+})();
+
+// --- Tool selection ---
+function mbSetTool(tool) {
+  mbCurrentTool = tool;
+  document.querySelectorAll('.mb-tool-btn[data-tool]').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.tool === tool);
+  });
+}
+
+// --- Clear canvas ---
+function mbClearCanvas() {
+  mbInitGrid();
+  mbDrawEditor();
+  mbUpdatePreview();
+}
+
+// --- Preview update ---
+function mbUpdatePreview() {
+  const canvas = document.getElementById('mobPreviewCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  ctx.imageSmoothingEnabled = false;
+  ctx.clearRect(0, 0, 128, 128);
+
+  // Draw scaled-up pixel art (16x16 -> 128x128 = 8x scale)
+  const scale = 128 / MB_GRID;
+  for (let y = 0; y < MB_GRID; y++) {
+    for (let x = 0; x < MB_GRID; x++) {
+      const px = mbPixels[y][x];
+      if (px) {
+        ctx.fillStyle = `rgba(${px[0]},${px[1]},${px[2]},${px[3]/255})`;
+        ctx.fillRect(x * scale, y * scale, scale, scale);
+      }
+    }
+  }
+
+  // Update stats text
+  const stats = document.getElementById('mbPreviewStats');
+  if (stats) {
+    const hp = document.getElementById('mbHp').value;
+    const dmg = document.getElementById('mbDmg').value;
+    const speed = document.getElementById('mbSpeed').value;
+    const type = document.getElementById('mbType').value;
+    const behavior = document.getElementById('mbBehavior').value;
+    const sizeScale = document.getElementById('mbScale').value;
+    stats.innerHTML =
+      `HP: <span>${hp}</span><br>` +
+      `DMG: <span>${dmg}</span><br>` +
+      `Speed: <span>${speed}</span><br>` +
+      `Type: <span>${type}</span><br>` +
+      `Behavior: <span>${behavior}</span><br>` +
+      `Size: <span>${sizeScale}x (${sizeScale * 16}px)</span>`;
+  }
+}
+
+// --- Save mob ---
+function mbSaveMob() {
+  const name = document.getElementById('mbName').value.trim();
+  if (!name) {
+    document.getElementById('mbName').style.borderColor = '#e94560';
+    document.getElementById('mbName').focus();
+    return;
+  }
+  document.getElementById('mbName').style.borderColor = '';
+
+  // Check if any pixels are drawn
+  let hasPixels = false;
+  for (let y = 0; y < MB_GRID && !hasPixels; y++)
+    for (let x = 0; x < MB_GRID && !hasPixels; x++)
+      if (mbPixels[y][x]) hasPixels = true;
+
+  if (!hasPixels) {
+    // Flash the canvas border red to show the user they need to draw something
+    const wrap = document.querySelector('.mb-canvas-wrap');
+    if (wrap) {
+      wrap.style.borderColor = '#e94560';
+      setTimeout(() => { wrap.style.borderColor = '#333'; }, 1500);
+    }
+    return;
+  }
+
+  // Flatten pixels to the format the game engine expects
+  const pixels = [];
+  for (let y = 0; y < MB_GRID; y++) {
+    for (let x = 0; x < MB_GRID; x++) {
+      pixels.push(mbPixels[y][x] ? [...mbPixels[y][x]] : null);
+    }
+  }
+
+  const mobData = {
+    name: name,
+    pixels: pixels,
+    width: MB_GRID,
+    height: MB_GRID,
+    type: document.getElementById('mbType').value,
+    hp: parseInt(document.getElementById('mbHp').value),
+    damage: parseInt(document.getElementById('mbDmg').value),
+    speed: document.getElementById('mbSpeed').value,
+    behavior: document.getElementById('mbBehavior').value,
+    spawnRate: document.getElementById('mbSpawnRate').value,
+    dropBlockId: parseInt(document.getElementById('mbDropBlock').value),
+    scale: parseInt(document.getElementById('mbScale').value) || 2,
+    id: mbEditingId || ('custom_' + Date.now() + '_' + Math.random().toString(36).slice(2,6)),
+  };
+
+  // Save via the game engine API
+  if (window.saveCustomMob) {
+    window.saveCustomMob(mobData);
+  }
+
+  // Reset editor
+  mbEditingId = null;
+  mbClearCanvas();
+  document.getElementById('mbName').value = '';
+  document.getElementById('mbHp').value = 3;
+  document.getElementById('mbHpVal').textContent = '3';
+  document.getElementById('mbDmg').value = 1;
+  document.getElementById('mbDmgVal').textContent = '1';
+  document.getElementById('mbSpeed').value = 'medium';
+  document.getElementById('mbType').value = 'ground';
+  document.getElementById('mbBehavior').value = 'patrol';
+  document.getElementById('mbSpawnRate').value = 'uncommon';
+  document.getElementById('mbDropBlock').value = '1';
+  document.getElementById('mbScale').value = 2;
+  document.getElementById('mbScaleVal').textContent = '2x';
+
+  // Refresh the list
+  mbRefreshList();
+  mbUpdatePreview();
+
+  // Flash a success message on the Save button
+  const saveBtn = document.querySelector('.mb-preview-panel .menu-btn.gold');
+  if (saveBtn) {
+    const orig = saveBtn.textContent;
+    saveBtn.textContent = 'Saved!';
+    saveBtn.style.background = '#44d67f';
+    setTimeout(() => {
+      saveBtn.textContent = orig;
+      saveBtn.style.background = '';
+    }, 1200);
+  }
+}
+
+// --- Load mob into editor (for editing) ---
+function mbEditMob(id) {
+  const mobs = window.getCustomMobs ? window.getCustomMobs() : [];
+  const mob = mobs.find(m => m.id === id);
+  if (!mob) return;
+
+  mbEditingId = mob.id;
+  document.getElementById('mbName').value = mob.name;
+  document.getElementById('mbType').value = mob.type;
+  document.getElementById('mbBehavior').value = mob.behavior;
+  document.getElementById('mbHp').value = mob.hp;
+  document.getElementById('mbHpVal').textContent = mob.hp;
+  document.getElementById('mbDmg').value = mob.damage;
+  document.getElementById('mbDmgVal').textContent = mob.damage;
+  document.getElementById('mbSpeed').value = mob.speed;
+  document.getElementById('mbSpawnRate').value = mob.spawnRate || 'uncommon';
+  document.getElementById('mbDropBlock').value = mob.dropBlockId || 1;
+  document.getElementById('mbScale').value = mob.scale || 2;
+  document.getElementById('mbScaleVal').textContent = (mob.scale || 2) + 'x';
+
+  // Load pixels
+  mbInitGrid();
+  if (mob.pixels) {
+    for (let i = 0; i < mob.pixels.length; i++) {
+      const x = i % MB_GRID;
+      const y = Math.floor(i / MB_GRID);
+      mbPixels[y][x] = mob.pixels[i] ? [...mob.pixels[i]] : null;
+    }
+  }
+
+  mbDrawEditor();
+  mbUpdatePreview();
+}
+
+// --- Delete mob ---
+function mbDeleteMob(id) {
+  if (window.deleteCustomMob) window.deleteCustomMob(id);
+  mbRefreshList();
+}
+
+// --- Refresh My Mobs list ---
+function mbRefreshList() {
+  const container = document.getElementById('mbMobsList');
+  const emptyMsg = document.getElementById('mbEmptyMsg');
+  if (!container) return;
+
+  const mobs = window.getCustomMobs ? window.getCustomMobs() : [];
+
+  // Remove old rows (keep section title and empty msg)
+  container.querySelectorAll('.mb-mob-row').forEach(r => r.remove());
+
+  if (mobs.length === 0) {
+    if (emptyMsg) emptyMsg.style.display = '';
+    return;
+  }
+
+  if (emptyMsg) emptyMsg.style.display = 'none';
+
+  mobs.forEach(mob => {
+    const row = document.createElement('div');
+    row.className = 'mb-mob-row';
+
+    // Create mini thumbnail
+    const thumbCanvas = document.createElement('canvas');
+    thumbCanvas.width = 32;
+    thumbCanvas.height = 32;
+    thumbCanvas.className = 'mb-mob-thumb';
+    const tctx = thumbCanvas.getContext('2d');
+    tctx.imageSmoothingEnabled = false;
+    if (mob.pixels) {
+      const s = 32 / MB_GRID; // 2px per pixel
+      for (let i = 0; i < mob.pixels.length; i++) {
+        const px = mob.pixels[i];
+        if (px) {
+          const x = i % MB_GRID;
+          const y = Math.floor(i / MB_GRID);
+          tctx.fillStyle = `rgba(${px[0]},${px[1]},${px[2]},${px[3]/255})`;
+          tctx.fillRect(x * s, y * s, s, s);
+        }
+      }
+    }
+
+    const info = document.createElement('div');
+    info.className = 'mb-mob-info';
+    info.innerHTML = `${mob.name} <span class="mob-type-tag">${mob.type} / ${mob.behavior} / HP:${mob.hp} DMG:${mob.damage}</span>`;
+
+    const actions = document.createElement('div');
+    actions.className = 'mb-mob-actions';
+    actions.innerHTML =
+      `<button class="mb-tool-btn" onclick="mbEditMob('${mob.id}')">Edit</button>` +
+      `<button class="mb-tool-btn" onclick="mbDeleteMob('${mob.id}')" style="border-color:#e94560">Del</button>`;
+
+    row.appendChild(thumbCanvas);
+    row.appendChild(info);
+    row.appendChild(actions);
+    container.appendChild(row);
+  });
+}
+
+// --- Open / Close Mob Builder ---
+function mbOpen() {
+  showScreen('mobBuilder');
+  mbBuildPalette();
+  mbDrawEditor();
+  mbUpdatePreview();
+  mbRefreshList();
+}
+
+function mbClose() {
+  showScreen('titleScreen');
+}
+
+// --- Add "Build a Mob" button to the title screen ---
+(function mbAddTitleButton() {
+  const titleScreen = document.getElementById('titleScreen');
+  if (!titleScreen) return;
+  // Find the Play button and add Mob Builder button after it
+  const playBtn = titleScreen.querySelector('.menu-btn.gold');
+  if (playBtn) {
+    const mobBtn = document.createElement('button');
+    mobBtn.className = 'menu-btn';
+    mobBtn.style.cssText = 'margin-top:4px;background:#7e57c2;z-index:1';
+    mobBtn.textContent = 'Mob Builder';
+    mobBtn.onclick = mbOpen;
+    playBtn.insertAdjacentElement('afterend', mobBtn);
+  }
+})();
+
+// Initialize
+mbBuildPalette();
+mbDrawEditor();
 </script>
 </body>
 </html>
