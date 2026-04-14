@@ -1,0 +1,796 @@
+/* ============================================
+   BlockWorld Explorer — Main Stylesheet
+   A 2D Sandbox Survival/Creative Game
+   Science Fair Project
+   ============================================ */
+
+/* --- Google Font: Press Start 2P (pixel font) --- */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+/* ============================================
+   CSS Custom Properties (Color Palette)
+   These variables make it easy to re-theme
+   per world later!
+   ============================================ */
+:root {
+  /* -- Core palette -- */
+  --color-bg-dark:       #1a1a2e;
+  --color-bg-medium:     #16213e;
+  --color-bg-light:      #0f3460;
+  --color-primary:       #e94560;
+  --color-primary-glow:  #ff6b81;
+  --color-accent:        #53d8fb;
+  --color-accent-dim:    #3aa5c4;
+  --color-gold:          #f5c542;
+  --color-gold-dim:      #c49b30;
+  --color-green:         #44d67f;
+  --color-white:         #f0f0f0;
+  --color-gray:          #888;
+  --color-gray-dark:     #444;
+  --color-black:         #111;
+  --color-overlay:       rgba(0, 0, 0, 0.75);
+
+  /* -- Character colors -- */
+  --luna-color:   #4fc3f7;
+  --sol-color:    #ffb74d;
+  --shade-color:  #7e57c2;
+  --chip-color:   #66bb6a;
+
+  /* -- World theme colors -- */
+  --moon-primary:     #b0bec5;
+  --moon-accent:      #80deea;
+  --sun-primary:      #fff176;
+  --sun-accent:       #ff8a65;
+  --mansion-primary:  #7e57c2;
+  --mansion-accent:   #e040fb;
+
+  /* -- UI sizing -- */
+  --hotbar-slot-size: 52px;
+  --heart-size:       24px;
+  --hud-padding:      12px;
+  --border-radius:    4px;
+  --pixel-border:     3px solid var(--color-white);
+
+  /* -- Font -- */
+  --font-pixel: 'Press Start 2P', monospace;
+}
+
+/* ============================================
+   Reset & Base Styles
+   ============================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--color-bg-dark);
+  font-family: var(--font-pixel);
+  color: var(--color-white);
+  image-rendering: pixelated;
+  -webkit-font-smoothing: none;
+}
+
+/* ============================================
+   Game Container
+   Everything lives inside this wrapper
+   ============================================ */
+#game-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* The game canvas fills the whole screen */
+#game-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+/* ============================================
+   Screen System
+   Each screen is a full-page overlay that
+   can be shown/hidden
+   ============================================ */
+.screen {
+  position: absolute;
+  inset: 0;
+  display: none;           /* hidden by default */
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  transition: opacity 0.3s ease;
+}
+
+.screen.active {
+  display: flex;
+}
+
+/* ============================================
+   TITLE SCREEN
+   ============================================ */
+#title-screen {
+  background: linear-gradient(
+    180deg,
+    #0b0e2d 0%,
+    #162050 30%,
+    #1a3a6a 60%,
+    #2d6e8e 100%
+  );
+}
+
+/* Animated star field behind the title */
+#title-screen::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(2px 2px at 20% 15%, white 50%, transparent 100%),
+    radial-gradient(2px 2px at 50% 25%, white 50%, transparent 100%),
+    radial-gradient(1px 1px at 80% 10%, white 50%, transparent 100%),
+    radial-gradient(2px 2px at 10% 45%, white 50%, transparent 100%),
+    radial-gradient(1px 1px at 65% 55%, white 50%, transparent 100%),
+    radial-gradient(2px 2px at 35% 70%, white 50%, transparent 100%),
+    radial-gradient(1px 1px at 90% 40%, white 50%, transparent 100%),
+    radial-gradient(2px 2px at 45% 85%, white 50%, transparent 100%),
+    radial-gradient(1px 1px at 75% 75%, white 50%, transparent 100%),
+    radial-gradient(2px 2px at 15% 90%, white 50%, transparent 100%);
+  animation: twinkle 4s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+@keyframes twinkle {
+  0%   { opacity: 0.6; }
+  100% { opacity: 1;   }
+}
+
+.title-content {
+  text-align: center;
+  z-index: 1;
+}
+
+.game-title {
+  font-size: clamp(1.5rem, 5vw, 3rem);
+  color: var(--color-gold);
+  text-shadow:
+    0 0 10px var(--color-gold),
+    0 0 30px var(--color-gold-dim),
+    4px 4px 0 var(--color-black);
+  letter-spacing: 2px;
+  margin-bottom: 8px;
+  animation: titleFloat 3s ease-in-out infinite;
+}
+
+.game-subtitle {
+  font-size: clamp(0.5rem, 1.5vw, 0.75rem);
+  color: var(--color-accent);
+  text-shadow: 2px 2px 0 var(--color-black);
+  margin-bottom: 48px;
+  opacity: 0.9;
+}
+
+@keyframes titleFloat {
+  0%, 100% { transform: translateY(0);   }
+  50%      { transform: translateY(-8px); }
+}
+
+/* ============================================
+   Buttons (shared)
+   ============================================ */
+.btn {
+  font-family: var(--font-pixel);
+  font-size: clamp(0.6rem, 1.5vw, 0.9rem);
+  padding: 14px 36px;
+  border: var(--pixel-border);
+  background: var(--color-primary);
+  color: var(--color-white);
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  position: relative;
+  transition: transform 0.1s, box-shadow 0.1s, background 0.2s;
+  box-shadow: 4px 4px 0 var(--color-black);
+}
+
+.btn:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 var(--color-black);
+  background: var(--color-primary-glow);
+}
+
+.btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 var(--color-black);
+}
+
+.btn-accent {
+  background: var(--color-accent);
+}
+.btn-accent:hover {
+  background: var(--color-accent-dim);
+}
+
+.btn-gold {
+  background: var(--color-gold);
+  color: var(--color-black);
+}
+.btn-gold:hover {
+  background: var(--color-gold-dim);
+}
+
+.btn-small {
+  font-size: 0.55rem;
+  padding: 10px 20px;
+}
+
+.btn:disabled,
+.btn.disabled {
+  background: var(--color-gray-dark);
+  color: var(--color-gray);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+.btn:disabled:hover,
+.btn.disabled:hover {
+  transform: none;
+  box-shadow: 4px 4px 0 var(--color-black);
+}
+
+/* ============================================
+   CHARACTER SELECT SCREEN
+   ============================================ */
+#character-screen {
+  background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+}
+
+.screen-heading {
+  font-size: clamp(0.8rem, 2.5vw, 1.4rem);
+  color: var(--color-gold);
+  text-shadow: 3px 3px 0 var(--color-black);
+  margin-bottom: 32px;
+}
+
+.character-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  max-width: 800px;
+  width: 90%;
+  margin-bottom: 32px;
+}
+
+/* Responsive: stack 2x2 on narrow screens */
+@media (max-width: 700px) {
+  .character-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.character-card {
+  background: var(--color-bg-medium);
+  border: 3px solid var(--color-gray-dark);
+  padding: 16px;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.15s, border-color 0.2s, box-shadow 0.2s;
+  box-shadow: 3px 3px 0 var(--color-black);
+}
+
+.character-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--color-accent);
+  box-shadow: 3px 7px 0 var(--color-black);
+}
+
+.character-card.selected {
+  border-color: var(--color-gold);
+  box-shadow: 0 0 12px var(--color-gold-dim), 3px 3px 0 var(--color-black);
+  transform: translateY(-4px);
+}
+
+/* Pixel character sprite (drawn with CSS boxes) */
+.character-sprite {
+  width: 48px;
+  height: 80px;
+  margin: 0 auto 12px;
+  position: relative;
+  image-rendering: pixelated;
+}
+
+/* Each character sprite is a small canvas drawn in ui.js,
+   but we style the wrapper here */
+
+.character-name {
+  font-size: 0.6rem;
+  color: var(--color-white);
+  margin-bottom: 8px;
+}
+
+.character-perk {
+  font-size: 0.45rem;
+  color: var(--color-accent);
+  line-height: 1.6;
+}
+
+/* ============================================
+   WORLD SELECT SCREEN
+   ============================================ */
+#world-screen {
+  background: linear-gradient(180deg, #1a1a2e 0%, #0f3460 100%);
+}
+
+.world-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  max-width: 900px;
+  width: 90%;
+  margin-bottom: 32px;
+}
+
+@media (max-width: 700px) {
+  .world-grid {
+    grid-template-columns: 1fr;
+    max-width: 320px;
+  }
+}
+
+.world-card {
+  background: var(--color-bg-medium);
+  border: 3px solid var(--color-gray-dark);
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.15s, border-color 0.2s, box-shadow 0.2s;
+  box-shadow: 3px 3px 0 var(--color-black);
+  position: relative;
+  overflow: hidden;
+}
+
+.world-card:hover:not(.disabled) {
+  transform: translateY(-4px);
+  border-color: var(--color-accent);
+  box-shadow: 3px 7px 0 var(--color-black);
+}
+
+.world-card.selected {
+  border-color: var(--color-gold);
+  box-shadow: 0 0 12px var(--color-gold-dim), 3px 3px 0 var(--color-black);
+}
+
+.world-card.disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.world-icon {
+  font-size: 2.5rem;
+  margin-bottom: 12px;
+  display: block;
+}
+
+.world-name {
+  font-size: 0.7rem;
+  margin-bottom: 8px;
+  color: var(--color-white);
+}
+
+.world-desc {
+  font-size: 0.4rem;
+  color: var(--color-accent);
+  line-height: 1.8;
+  margin-bottom: 8px;
+}
+
+.coming-soon-badge {
+  display: inline-block;
+  font-size: 0.45rem;
+  padding: 4px 10px;
+  background: var(--color-gray-dark);
+  color: var(--color-gray);
+  border: 2px solid var(--color-gray);
+  margin-top: 8px;
+}
+
+/* ============================================
+   MODE SELECT (inline on world screen)
+   ============================================ */
+.mode-select {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.mode-btn {
+  font-family: var(--font-pixel);
+  font-size: 0.55rem;
+  padding: 12px 24px;
+  border: 3px solid var(--color-gray-dark);
+  background: var(--color-bg-medium);
+  color: var(--color-white);
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+  box-shadow: 3px 3px 0 var(--color-black);
+}
+
+.mode-btn:hover {
+  border-color: var(--color-accent);
+}
+
+.mode-btn.selected {
+  border-color: var(--color-gold);
+  background: var(--color-bg-light);
+  box-shadow: 0 0 8px var(--color-gold-dim);
+}
+
+/* ============================================
+   GAME HUD (in-game overlay)
+   ============================================ */
+#game-hud {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;   /* clicks pass through to canvas */
+  z-index: 50;
+  display: none;
+}
+
+#game-hud.active {
+  display: block;
+}
+
+/* --- Hearts (top-left) --- */
+.hud-hearts {
+  position: absolute;
+  top: var(--hud-padding);
+  left: var(--hud-padding);
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  max-width: 280px;
+}
+
+.heart {
+  width: var(--heart-size);
+  height: var(--heart-size);
+  position: relative;
+}
+
+/* CSS heart shape using clip-path */
+.heart::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--color-primary);
+  clip-path: path('M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z');
+  transform: scale(1.0);
+}
+
+/* Pixel-style heart using box shadows (more pixel-art feel) */
+.heart-pixel {
+  width: var(--heart-size);
+  height: var(--heart-size);
+  position: relative;
+  display: inline-block;
+}
+
+.heart-pixel svg {
+  width: 100%;
+  height: 100%;
+}
+
+.heart-pixel.empty svg .heart-fill {
+  fill: var(--color-gray-dark);
+}
+
+.heart-pixel.full svg .heart-fill {
+  fill: var(--color-primary);
+}
+
+.heart-pixel.full svg .heart-fill {
+  filter: drop-shadow(0 0 3px var(--color-primary-glow));
+}
+
+/* heart damage flash */
+.heart-pixel.damage {
+  animation: heartShake 0.3s ease;
+}
+
+@keyframes heartShake {
+  0%, 100% { transform: translateX(0);  }
+  25%      { transform: translateX(-3px); }
+  75%      { transform: translateX(3px);  }
+}
+
+/* --- Mode & Layer indicators (top-right) --- */
+.hud-indicators {
+  position: absolute;
+  top: var(--hud-padding);
+  right: var(--hud-padding);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: flex-end;
+}
+
+.hud-indicator {
+  font-size: 0.45rem;
+  padding: 4px 10px;
+  background: rgba(0, 0, 0, 0.6);
+  border: 2px solid var(--color-gray-dark);
+  color: var(--color-white);
+  white-space: nowrap;
+}
+
+.hud-indicator.creative {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.hud-indicator.survival {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.hud-indicator.front-layer {
+  border-color: var(--color-green);
+  color: var(--color-green);
+}
+
+.hud-indicator.back-layer {
+  border-color: var(--color-gold);
+  color: var(--color-gold);
+}
+
+/* --- Hotbar (bottom-center) --- */
+.hud-hotbar {
+  position: absolute;
+  bottom: var(--hud-padding);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 4px;
+  pointer-events: auto;  /* hotbar is clickable */
+}
+
+.hotbar-slot {
+  width: var(--hotbar-slot-size);
+  height: var(--hotbar-slot-size);
+  background: rgba(0, 0, 0, 0.6);
+  border: 3px solid var(--color-gray-dark);
+  position: relative;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+
+.hotbar-slot:hover {
+  border-color: var(--color-accent-dim);
+}
+
+.hotbar-slot.selected {
+  border-color: var(--color-gold);
+  box-shadow: 0 0 8px var(--color-gold-dim);
+}
+
+/* Block preview in the hotbar slot */
+.hotbar-slot .block-preview {
+  position: absolute;
+  inset: 4px;
+  /* background color set dynamically via JS */
+}
+
+/* Stack count number in bottom-right of slot */
+.hotbar-slot .stack-count {
+  position: absolute;
+  bottom: 2px;
+  right: 3px;
+  font-family: var(--font-pixel);
+  font-size: 0.35rem;
+  color: var(--color-white);
+  text-shadow: 1px 1px 0 var(--color-black);
+  pointer-events: none;
+}
+
+/* Slot number label (1-8) */
+.hotbar-slot .slot-number {
+  position: absolute;
+  top: 1px;
+  left: 3px;
+  font-family: var(--font-pixel);
+  font-size: 0.3rem;
+  color: var(--color-gray);
+  pointer-events: none;
+}
+
+/* ============================================
+   PAUSE MENU
+   ============================================ */
+#pause-screen {
+  background: var(--color-overlay);
+  z-index: 200;
+}
+
+.pause-menu {
+  background: var(--color-bg-medium);
+  border: var(--pixel-border);
+  padding: 32px 48px;
+  text-align: center;
+  box-shadow: 6px 6px 0 var(--color-black);
+}
+
+.pause-title {
+  font-size: 1rem;
+  color: var(--color-gold);
+  text-shadow: 3px 3px 0 var(--color-black);
+  margin-bottom: 24px;
+}
+
+.pause-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ============================================
+   DEATH SCREEN
+   ============================================ */
+#death-screen {
+  background: rgba(80, 0, 0, 0.8);
+  z-index: 200;
+}
+
+.death-content {
+  text-align: center;
+  animation: deathFadeIn 0.8s ease;
+}
+
+@keyframes deathFadeIn {
+  0%   { opacity: 0; transform: scale(0.9); }
+  100% { opacity: 1; transform: scale(1);   }
+}
+
+.death-title {
+  font-size: clamp(0.9rem, 3vw, 1.5rem);
+  color: var(--color-primary);
+  text-shadow: 3px 3px 0 var(--color-black);
+  margin-bottom: 16px;
+}
+
+.death-message {
+  font-size: 0.5rem;
+  color: var(--color-white);
+  margin-bottom: 32px;
+  line-height: 2;
+  opacity: 0.9;
+}
+
+/* ============================================
+   PHYSICS STATS OVERLAY (Science Fair!)
+   ============================================ */
+#physics-stats {
+  position: absolute;
+  top: var(--hud-padding);
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.7);
+  border: 2px solid var(--color-green);
+  padding: 8px 14px;
+  font-size: 0.38rem;
+  line-height: 1.8;
+  color: var(--color-green);
+  z-index: 55;
+  display: none;
+  min-width: 220px;
+}
+
+#physics-stats.active {
+  display: block;
+}
+
+#physics-stats .stat-label {
+  color: var(--color-gray);
+}
+
+/* ============================================
+   Screen Transition Animation
+   ============================================ */
+.screen.fade-in {
+  animation: screenFadeIn 0.4s ease;
+}
+
+@keyframes screenFadeIn {
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+/* ============================================
+   Damage Flash Effect (screen edges go red)
+   ============================================ */
+.damage-flash {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 60;
+  opacity: 0;
+  box-shadow: inset 0 0 80px 20px rgba(233, 69, 96, 0.6);
+  transition: opacity 0.1s ease;
+}
+
+.damage-flash.active {
+  opacity: 1;
+  animation: flashPulse 0.3s ease-out;
+}
+
+@keyframes flashPulse {
+  0%   { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* ============================================
+   Creative Mode Block Palette
+   ============================================ */
+#block-palette {
+  position: absolute;
+  right: var(--hud-padding);
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.7);
+  border: 3px solid var(--color-accent);
+  padding: 8px;
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 70vh;
+  overflow-y: auto;
+  z-index: 55;
+  pointer-events: auto;
+}
+
+#block-palette.active {
+  display: flex;
+}
+
+.palette-block {
+  width: 40px;
+  height: 40px;
+  border: 2px solid var(--color-gray-dark);
+  cursor: pointer;
+  transition: border-color 0.15s;
+  position: relative;
+}
+
+.palette-block:hover {
+  border-color: var(--color-gold);
+}
+
+.palette-block .block-name-tooltip {
+  display: none;
+  position: absolute;
+  right: 48px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--color-black);
+  color: var(--color-white);
+  font-size: 0.35rem;
+  padding: 4px 8px;
+  white-space: nowrap;
+  border: 1px solid var(--color-gray-dark);
+  pointer-events: none;
+}
+
+.palette-block:hover .block-name-tooltip {
+  display: block;
+}
+
+/* ============================================
+   Utility
+   ============================================ */
+.hidden { display: none !important; }
