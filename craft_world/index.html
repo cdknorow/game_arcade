@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BlockWorld Explorer</title>
+<title>World Craft</title>
 <!-- Pixel font for that retro game feel -->
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 <style>
 /* ============================================
-   BlockWorld Explorer — Polished Styles
+   World Craft — Polished Styles
    Pixel-art aesthetic with animations
    ============================================ */
 :root {
@@ -338,45 +338,51 @@ canvas {
 }
 #mobBuilder.hidden { display: none; }
 
+/* --- Mob Builder: scrollable full-page layout --- */
+#mobBuilder {
+  overflow-y: auto;
+  padding: 30px 20px;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
 .mb-builder-title {
-  font-size: clamp(0.7rem, 2vw, 1rem);
+  font-size: 1.2rem;
   color: var(--color-gold);
   text-shadow: 3px 3px 0 var(--color-black);
-  margin-bottom: 20px;
-  z-index: 1;
+  margin-bottom: 24px;
+  width: 100%;
+  text-align: center;
 }
 
 .mob-builder-layout {
-  display: flex;
-  gap: 24px;
-  max-width: 1100px;
-  width: 95%;
-  align-items: flex-start;
-  flex-wrap: wrap;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  gap: 20px;
+  max-width: 1400px;
+  width: 100%;
 }
 
 /* --- Pixel Art Editor --- */
 .mb-editor {
   background: var(--color-bg-medium);
   border: 3px solid var(--color-gray-dark);
-  padding: 16px;
+  padding: 20px;
   box-shadow: 3px 3px 0 var(--color-black);
-  flex-shrink: 0;
 }
 
 .mb-section-title {
-  font-size: 0.5rem;
+  font-size: 0.75rem;
   color: var(--color-accent);
-  margin-bottom: 12px;
+  margin-bottom: 14px;
   text-shadow: 1px 1px 0 var(--color-black);
 }
 
 .mb-canvas-wrap {
   position: relative;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
   background: #000;
-  border: 2px solid #333;
+  border: 2px solid #555;
   line-height: 0;
 }
 
@@ -384,34 +390,36 @@ canvas {
   cursor: crosshair;
   image-rendering: pixelated;
   image-rendering: crisp-edges;
+  width: 512px;
+  height: 512px;
 }
 
 /* Color picker row */
 .mb-colors {
   display: flex;
-  gap: 5px;
+  gap: 6px;
   flex-wrap: wrap;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
   align-items: center;
 }
 
 .mb-color-swatch {
-  width: 22px;
-  height: 22px;
-  border: 2px solid #333;
+  width: 24px;
+  height: 24px;
+  border: 2px solid #555;
   cursor: pointer;
   transition: transform 0.1s, border-color 0.15s;
 }
 .mb-color-swatch:hover { transform: scale(1.15); }
 .mb-color-swatch.selected {
   border-color: var(--color-white);
-  box-shadow: 0 0 6px rgba(255,255,255,0.4);
-  transform: scale(1.15);
+  box-shadow: 0 0 8px rgba(255,255,255,0.5);
+  transform: scale(1.2);
 }
 
 #mbCustomColor {
-  width: 26px;
-  height: 26px;
+  width: 28px;
+  height: 28px;
   border: 2px solid var(--color-gray-dark);
   background: none;
   padding: 0;
@@ -420,14 +428,14 @@ canvas {
 
 .mb-tools {
   display: flex;
-  gap: 6px;
+  gap: 8px;
   margin-bottom: 10px;
 }
 
 .mb-tool-btn {
   font-family: var(--font-pixel);
-  font-size: 0.35rem;
-  padding: 6px 10px;
+  font-size: 0.55rem;
+  padding: 8px 14px;
   background: var(--color-bg-medium);
   color: var(--color-white);
   border: 2px solid var(--color-gray-dark);
@@ -445,27 +453,26 @@ canvas {
 .mb-settings {
   background: var(--color-bg-medium);
   border: 3px solid var(--color-gray-dark);
-  padding: 16px;
+  padding: 20px;
   box-shadow: 3px 3px 0 var(--color-black);
-  min-width: 240px;
-  flex: 1;
-  max-width: 300px;
+  min-width: 260px;
+  overflow-y: auto;
 }
 
-.mb-field { margin-bottom: 12px; }
+.mb-field { margin-bottom: 14px; }
 
 .mb-label {
   display: block;
-  font-size: 0.35rem;
-  color: var(--color-gray);
-  margin-bottom: 5px;
+  font-size: 0.55rem;
+  color: var(--color-white);
+  margin-bottom: 6px;
 }
 
 .mb-input {
   font-family: var(--font-pixel);
-  font-size: 0.38rem;
+  font-size: 0.55rem;
   width: 100%;
-  padding: 7px;
+  padding: 8px 10px;
   background: #0a0a1a;
   color: var(--color-white);
   border: 2px solid var(--color-gray-dark);
@@ -475,9 +482,9 @@ canvas {
 
 .mb-select {
   font-family: var(--font-pixel);
-  font-size: 0.38rem;
+  font-size: 0.55rem;
   width: 100%;
-  padding: 7px;
+  padding: 8px 10px;
   background: #0a0a1a;
   color: var(--color-white);
   border: 2px solid var(--color-gray-dark);
@@ -490,13 +497,13 @@ canvas {
 .mb-range-wrap {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
 }
-.mb-range { flex: 1; accent-color: var(--color-accent); }
+.mb-range { flex: 1; accent-color: var(--color-accent); height: 20px; }
 .mb-range-val {
-  font-size: 0.4rem;
+  font-size: 0.6rem;
   color: var(--color-gold);
-  min-width: 22px;
+  min-width: 28px;
   text-align: center;
 }
 
@@ -504,18 +511,18 @@ canvas {
 .mb-preview-panel {
   background: var(--color-bg-medium);
   border: 3px solid var(--color-gray-dark);
-  padding: 16px;
+  padding: 20px;
   box-shadow: 3px 3px 0 var(--color-black);
   text-align: center;
-  min-width: 180px;
+  min-width: 200px;
 }
 
 .mb-preview-box {
   width: 128px;
   height: 128px;
-  margin: 0 auto 12px;
+  margin: 0 auto 14px;
   background: #0a0a1a;
-  border: 2px solid #333;
+  border: 2px solid #555;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -528,77 +535,127 @@ canvas {
 }
 
 .mb-preview-stats {
-  font-size: 0.32rem;
+  font-size: 0.5rem;
   color: var(--color-gray);
-  line-height: 2.2;
+  line-height: 2.4;
   text-align: left;
+  margin-bottom: 10px;
 }
 .mb-preview-stats span { color: var(--color-accent); }
 
-/* --- My Mobs List --- */
+/* --- My Mobs List (4th column) --- */
 .mb-mobs-list {
   background: var(--color-bg-medium);
   border: 3px solid var(--color-gray-dark);
-  padding: 16px;
+  padding: 20px;
   box-shadow: 3px 3px 0 var(--color-black);
-  width: 100%;
-  max-width: 1100px;
-  margin-top: 16px;
-  max-height: 200px;
+  min-width: 280px;
+  max-width: 340px;
   overflow-y: auto;
+  max-height: 500px;
 }
 
 .mb-mob-row {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 12px;
-  padding: 8px;
-  border-bottom: 1px solid #222;
+  gap: 8px;
+  padding: 14px 10px;
+  border-bottom: 2px solid #333;
+  text-align: center;
 }
 .mb-mob-row:last-child { border-bottom: none; }
 
 .mb-mob-thumb {
-  width: 32px;
-  height: 32px;
+  width: 80px;
+  height: 80px;
   background: #0a0a1a;
   image-rendering: pixelated;
+  image-rendering: crisp-edges;
   flex-shrink: 0;
+  border: 2px solid #666;
 }
 
 .mb-mob-info {
   flex: 1;
-  font-size: 0.32rem;
-  color: var(--color-white);
+}
+.mb-mob-name {
+  font-size: 0.7rem;
+  color: var(--color-gold);
+  margin-bottom: 4px;
+}
+.mb-mob-stats {
+  font-size: 0.45rem;
+  color: var(--color-accent);
   line-height: 1.8;
 }
-.mb-mob-info .mob-type-tag {
-  font-size: 0.28rem;
-  color: var(--color-gray);
+
+.mb-mob-actions {
+  display: flex;
+  gap: 12px;
+  flex-shrink: 0;
+}
+.mb-list-btn {
+  font-size: 0.65rem !important;
+  padding: 10px 22px !important;
+  min-width: 80px;
 }
 
-.mb-mob-actions { display: flex; gap: 6px; }
-
 .mb-empty-msg {
-  font-size: 0.35rem;
+  font-size: 0.7rem;
   color: var(--color-gray);
   text-align: center;
-  padding: 16px;
+  padding: 30px;
 }
 
 .mb-bottom-btns {
   display: flex;
-  gap: 12px;
-  margin-top: 16px;
+  gap: 16px;
+  margin-top: 20px;
   justify-content: center;
   width: 100%;
 }
+
+/* --- Responsive: stack on smaller screens --- */
+@media (max-width: 1200px) {
+  .mob-builder-layout {
+    grid-template-columns: auto 1fr auto;
+  }
+  .mb-mobs-list {
+    grid-column: 1 / -1;
+    max-width: 100%;
+    max-height: 200px;
+  }
+  .mb-mob-row { flex-direction: row; text-align: left; }
+}
+@media (max-width: 900px) {
+  .mob-builder-layout {
+    grid-template-columns: 1fr;
+  }
+}
+/* ===== TOUCH CONTROLS OVERLAY ===== */
+#touch-controls{display:none;position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:1000;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+.touch-btn{pointer-events:auto;position:absolute;display:flex;align-items:center;justify-content:center;width:64px;height:64px;border:3px solid rgba(255,255,255,0.5);border-radius:8px;background:rgba(30,30,60,0.4);color:rgba(255,255,255,0.7);font-family:var(--font-pixel);font-size:18px;text-shadow:1px 1px 0 #000;box-shadow:inset 0 -3px 0 rgba(0,0,0,0.3),0 2px 8px rgba(0,0,0,0.3);transition:background 0.08s,transform 0.08s;-webkit-tap-highlight-color:transparent}
+.touch-btn:active,.touch-btn.pressed{background:rgba(80,80,140,0.6);transform:scale(0.92)}
+.touch-dpad{position:absolute;bottom:80px;left:20px}
+.touch-dpad .touch-btn-left{bottom:0;left:0}
+.touch-dpad .touch-btn-right{bottom:0;left:140px}
+.touch-dpad .touch-btn-jump{bottom:74px;left:70px;width:64px;height:56px;border-color:rgba(83,216,251,0.6);color:rgba(83,216,251,0.9)}
+.touch-actions{position:absolute;bottom:80px;right:20px}
+.touch-btn-a{bottom:0;right:80px;border-color:rgba(233,69,96,0.6);background:rgba(233,69,96,0.25);font-size:14px}
+.touch-btn-b{bottom:0;right:0;border-color:rgba(68,214,127,0.6);background:rgba(68,214,127,0.25);font-size:14px}
+.touch-btn-jump-r{bottom:74px;right:40px;width:64px;height:56px;border-color:rgba(83,216,251,0.6);color:rgba(83,216,251,0.9);font-size:10px}
+.touch-btn-pause{top:12px;right:12px;width:48px;height:48px;font-size:20px;border-radius:50%}
+.touch-btn-inv{top:12px;right:72px;width:48px;height:48px;font-size:14px;border-color:rgba(245,197,66,0.6)}
+.touch-btn-physics{top:12px;right:132px;width:40px;height:40px;font-size:12px;opacity:0.6}
+.touch-label{position:absolute;font-family:var(--font-pixel);font-size:7px;color:rgba(255,255,255,0.45);pointer-events:none}
 </style>
 </head>
 <body>
 
 <!-- ===== TITLE SCREEN ===== -->
 <div id="titleScreen" class="overlay">
-  <h1>BlockWorld<br>Explorer</h1>
+  <h1>World<br>Craft</h1>
   <h2>A 2D Sandbox Adventure</h2>
   <p>Mine, build, explore, and survive across alien worlds!</p>
   <button class="menu-btn gold" onclick="showScreen('characterSelect')">Play</button>
@@ -655,8 +712,17 @@ canvas {
     <!-- Pixel Art Editor -->
     <div class="mb-editor">
       <div class="mb-section-title">Draw Your Mob</div>
+      <div style="margin-bottom:6px;display:flex;align-items:center;gap:8px">
+        <label class="mb-label" style="margin:0;font-size:8px">Grid:</label>
+        <select class="mb-select" id="mbGridSize" onchange="mbChangeGridSize(parseInt(this.value))" style="width:auto;padding:4px 8px;font-size:9px">
+          <option value="8">8x8</option>
+          <option value="12">12x12</option>
+          <option value="16" selected>16x16</option>
+          <option value="20">20x20</option>
+        </select>
+      </div>
       <div class="mb-canvas-wrap">
-        <canvas id="mobPixelCanvas" width="256" height="256"></canvas>
+        <canvas id="mobPixelCanvas" width="512" height="512"></canvas>
       </div>
       <div class="mb-colors" id="mbColorPalette"></div>
       <div class="mb-tools">
@@ -697,10 +763,10 @@ canvas {
         </div>
       </div>
       <div class="mb-field">
-        <label class="mb-label">Damage: <span class="mb-range-val" id="mbDmgVal">1</span></label>
+        <label class="mb-label">Damage: <span class="mb-range-val" id="mbDmgVal">1</span> <span id="mbFriendlyTag" style="color:#44d67f;font-size:8px;display:none">Friendly!</span></label>
         <div class="mb-range-wrap">
-          <input type="range" class="mb-range" id="mbDmg" min="1" max="5" value="1"
-            oninput="document.getElementById('mbDmgVal').textContent=this.value; mbUpdatePreview()">
+          <input type="range" class="mb-range" id="mbDmg" min="0" max="5" value="1"
+            oninput="document.getElementById('mbDmgVal').textContent=this.value; document.getElementById('mbFriendlyTag').style.display=this.value==='0'?'inline':'none'; mbUpdatePreview()">
         </div>
       </div>
       <div class="mb-field">
@@ -755,14 +821,14 @@ canvas {
         Type: <span>Ground</span><br>
         Behavior: <span>Patrol</span>
       </div>
-      <button class="menu-btn gold" style="margin-top:12px;min-width:160px;font-size:0.45rem;padding:10px 20px" onclick="mbSaveMob()">Save Mob</button>
+      <button class="menu-btn gold" style="margin-top:14px;min-width:180px;font-size:0.65rem;padding:12px 24px" onclick="mbSaveMob()">Save Mob</button>
     </div>
-  </div>
 
-  <!-- My Mobs List -->
-  <div class="mb-mobs-list" id="mbMobsList">
-    <div class="mb-section-title">My Mobs</div>
-    <div class="mb-empty-msg" id="mbEmptyMsg">No custom mobs yet. Draw one above!</div>
+    <!-- My Mobs List (4th column) -->
+    <div class="mb-mobs-list" id="mbMobsList">
+      <div class="mb-section-title">My Mobs</div>
+      <div class="mb-empty-msg" id="mbEmptyMsg">No custom mobs yet. Draw one!</div>
+    </div>
   </div>
 
   <!-- Bottom buttons -->
@@ -776,7 +842,7 @@ canvas {
 
 <script>
 // =============================================================
-// BlockWorld Explorer — MVP
+// World Craft — MVP
 // A 2D sandbox survival/creative game for the science fair
 // =============================================================
 
@@ -786,8 +852,8 @@ canvas {
 
 const TILE_SIZE = 32;           // Each block is 32x32 pixels
 const WORLD_WIDTH = 200;        // World is 200 blocks wide
-const WORLD_HEIGHT = 60;        // World is 60 blocks tall
-const SURFACE_Y = 20;           // Where the ground surface starts (from the top)
+const WORLD_HEIGHT = 100;       // World is 100 blocks tall (more room for caves!)
+const SURFACE_Y = 25;           // Where the ground surface starts (from the top)
 
 // ----- Physics Constants -----
 // These are the numbers that make the game feel like a real world.
@@ -854,9 +920,26 @@ const CHARACTERS = [
 
 // ===== WEAPONS =====
 const WEAPONS = {
-  FIST:       { name: 'Fist',       damage: 1, range: 1.5, speed: 150 },
-  WOOD_SWORD: { name: 'Wood Sword', damage: 2, range: 2,   speed: 250 },
+  FIST:       { name: 'Fist',       damage: 1, range: 1.5, speed: 150, type: 'melee' },
+  WOOD_SWORD: { name: 'Wood Sword', damage: 2, range: 2,   speed: 250, type: 'melee' },
+  BOW:        { name: 'Bow',        damage: 2, range: 8,   speed: 400, type: 'ranged' },
+  FIRE_WAND:  { name: 'Fire Wand',  damage: 3, range: 10,  speed: 500, type: 'magic' },
 };
+
+// ===== ITEMS =====
+// Items are things in the hotbar that aren't blocks — weapons, potions, ammo.
+// Each item has a unique string id, display name, max stack size, and a category.
+const ITEMS = {
+  HEALTH_POTION: { id: 'health_potion', name: 'Health Potion',  maxStack: 5,  category: 'consumable', color: '#f55',  detail: '#faa' },
+  WOOD_SWORD:    { id: 'wood_sword',    name: 'Wood Sword',     maxStack: 1,  category: 'weapon',     weapon: WEAPONS.WOOD_SWORD },
+  BOW:           { id: 'bow',           name: 'Bow',            maxStack: 1,  category: 'weapon',     weapon: WEAPONS.BOW },
+  ARROWS:        { id: 'arrows',        name: 'Arrows',         maxStack: 64, category: 'ammo',       color: '#A0724A', detail: '#888' },
+  FIRE_WAND:     { id: 'fire_wand',     name: 'Fire Wand',      maxStack: 1,  category: 'weapon',     weapon: WEAPONS.FIRE_WAND, charges: 30 },
+};
+
+// Lookup item by id string
+const ITEM_BY_ID = {};
+for (const key in ITEMS) ITEM_BY_ID[ITEMS[key].id] = ITEMS[key];
 
 // ===== GAME STATE =====
 // These variables track everything happening in the game right now.
@@ -924,6 +1007,10 @@ let showBlockPalette = false;
 // Sword pickup location in the world
 let swordPickup = null;
 
+// Item pickups scattered in the world (potions, arrows, weapons)
+// Each: { x, y (tile coords), itemId, count, collected, charges (optional) }
+let itemPickups = [];
+
 // Attack animation
 let attackAnim = { active: false, timer: 0, angle: 0 };
 
@@ -969,14 +1056,14 @@ function confirmCharacter() {
 // This function creates the terrain for the Tropical Moon world.
 // It uses simple math (sine waves) to make rolling hills.
 function generateWorld() {
-  // Create empty world grid filled with air
+  // ===== STEP 1: Create empty world filled with air =====
   world = [];
   for (let y = 0; y < WORLD_HEIGHT; y++) {
     world[y] = new Array(WORLD_WIDTH).fill(BLOCKS.AIR.id);
   }
 
-  // Generate terrain height using sine waves for rolling hills
-  // This is like adding waves together to make interesting shapes!
+  // ===== STEP 2: Generate surface terrain using sine waves =====
+  // Layering sine waves creates natural-looking rolling hills (Fourier synthesis!)
   const heights = [];
   for (let x = 0; x < WORLD_WIDTH; x++) {
     let h = SURFACE_Y;
@@ -986,59 +1073,254 @@ function generateWorld() {
     heights[x] = Math.floor(h);
   }
 
-  // Fill in blocks based on height
+  // ===== STEP 3: Fill in solid ground with layered block types =====
   for (let x = 0; x < WORLD_WIDTH; x++) {
     const surfaceH = heights[x];
     for (let y = 0; y < WORLD_HEIGHT; y++) {
-      if (y < surfaceH) {
-        // Above ground = air (sky)
-        continue;
-      } else if (y === surfaceH) {
-        // Surface layer = dirt (or sand near water)
-        world[y][x] = BLOCKS.DIRT.id;
-      } else if (y < surfaceH + 4) {
-        // Just below surface = dirt
-        world[y][x] = BLOCKS.DIRT.id;
-      } else if (y < surfaceH + 8) {
-        // Deeper = moon rock
-        world[y][x] = BLOCKS.MOON_ROCK.id;
+      if (y < surfaceH) continue; // Sky = air
+      const depth = y - surfaceH;
+      if (depth === 0) {
+        world[y][x] = BLOCKS.DIRT.id;       // Surface
+      } else if (depth < 5) {
+        world[y][x] = BLOCKS.DIRT.id;       // Topsoil
+      } else if (depth < 15) {
+        world[y][x] = BLOCKS.MOON_ROCK.id;  // Mid layer
+      } else if (depth < 40) {
+        world[y][x] = BLOCKS.STONE.id;      // Deep layer
       } else {
-        // Deepest = stone
-        world[y][x] = BLOCKS.STONE.id;
+        world[y][x] = BLOCKS.OBSIDIAN.id;   // Bedrock/deepest layer
       }
     }
   }
 
-  // Add some sand patches on the surface
+  // ===== STEP 4: Generate caves using cellular automata =====
+  // This is a real algorithm used in games! Start with random noise,
+  // then smooth it — areas with many neighbors become solid, areas
+  // with few neighbors become open caves.
+  const caveMap = [];
+  for (let y = 0; y < WORLD_HEIGHT; y++) {
+    caveMap[y] = [];
+    for (let x = 0; x < WORLD_WIDTH; x++) {
+      const depth = y - heights[Math.min(x, WORLD_WIDTH - 1)];
+      if (depth < 3) {
+        caveMap[y][x] = 0; // Never carve right at the surface
+      } else {
+        // More likely to have caves at medium depths
+        const caveChance = depth < 8 ? 0.38 : depth < 25 ? 0.42 : depth < 40 ? 0.40 : 0.35;
+        caveMap[y][x] = Math.random() < caveChance ? 1 : 0;
+      }
+    }
+  }
+
+  // Run cellular automata smoothing passes — this creates natural-looking caves
+  // Each cell looks at its 8 neighbors: if 5+ are solid, it becomes solid
+  for (let pass = 0; pass < 4; pass++) {
+    const newMap = [];
+    for (let y = 0; y < WORLD_HEIGHT; y++) {
+      newMap[y] = [];
+      for (let x = 0; x < WORLD_WIDTH; x++) {
+        const depth = y - heights[Math.min(x, WORLD_WIDTH - 1)];
+        if (depth < 3 || y >= WORLD_HEIGHT - 2 || x <= 0 || x >= WORLD_WIDTH - 1) {
+          newMap[y][x] = 0; // Keep surface and edges solid
+          continue;
+        }
+        // Count solid neighbors (including diagonals)
+        let solidNeighbors = 0;
+        for (let dy = -1; dy <= 1; dy++) {
+          for (let dx = -1; dx <= 1; dx++) {
+            if (dy === 0 && dx === 0) continue;
+            const ny = y + dy, nx = x + dx;
+            if (ny < 0 || ny >= WORLD_HEIGHT || nx < 0 || nx >= WORLD_WIDTH) {
+              solidNeighbors++; // Out of bounds counts as solid
+            } else {
+              solidNeighbors += (1 - caveMap[ny][nx]);
+            }
+          }
+        }
+        // 5+ solid neighbors = this cell becomes solid (0), otherwise cave (1)
+        newMap[y][x] = solidNeighbors >= 5 ? 0 : 1;
+      }
+    }
+    for (let y = 0; y < WORLD_HEIGHT; y++) {
+      for (let x = 0; x < WORLD_WIDTH; x++) {
+        caveMap[y][x] = newMap[y][x];
+      }
+    }
+  }
+
+  // Carve caves into the world
+  for (let y = 0; y < WORLD_HEIGHT; y++) {
+    for (let x = 0; x < WORLD_WIDTH; x++) {
+      if (caveMap[y][x] === 1 && world[y][x] !== BLOCKS.AIR.id) {
+        world[y][x] = BLOCKS.AIR.id;
+      }
+    }
+  }
+
+  // ===== STEP 5: Add surface cave openings =====
+  // Carve visible entrances that always connect to the cave network
+  for (let i = 0; i < 6; i++) {
+    const cx = Math.floor(Math.random() * (WORLD_WIDTH - 20)) + 10;
+    const surfH = heights[cx];
+    // Carve a 3-wide, 4-tall entrance at the surface
+    for (let dy = 0; dy < 4; dy++) {
+      for (let dx = -1; dx <= 1; dx++) {
+        const ex = cx + dx, ey = surfH + dy;
+        if (ex >= 0 && ex < WORLD_WIDTH && ey >= 0 && ey < WORLD_HEIGHT) {
+          world[ey][ex] = BLOCKS.AIR.id;
+        }
+      }
+    }
+    // Carve a shaft downward until it connects to a cave (max 40 blocks deep)
+    let connected = false;
+    for (let dy = 4; dy < 40; dy++) {
+      const ey = surfH + dy;
+      if (ey >= WORLD_HEIGHT - 1) break;
+      // Check if we've reached an existing cave
+      if (world[ey][cx] === BLOCKS.AIR.id) { connected = true; break; }
+      // Carve the shaft (2 blocks wide)
+      world[ey][cx] = BLOCKS.AIR.id;
+      if (cx + 1 < WORLD_WIDTH) world[ey][cx + 1] = BLOCKS.AIR.id;
+    }
+    // If still not connected, carve a small room at the bottom so it's not a dead-end
+    if (!connected) {
+      const bottomY = Math.min(surfH + 40, WORLD_HEIGHT - 3);
+      for (let dy = -2; dy <= 2; dy++) {
+        for (let dx = -2; dx <= 2; dx++) {
+          const ey = bottomY + dy, ex = cx + dx;
+          if (ey >= 0 && ey < WORLD_HEIGHT && ex >= 0 && ex < WORLD_WIDTH) {
+            world[ey][ex] = BLOCKS.AIR.id;
+          }
+        }
+      }
+    }
+  }
+
+  // ===== STEP 6: Underground water pools =====
+  // Fill the bottom of some caverns with water
+  for (let i = 0; i < 8; i++) {
+    const px = Math.floor(Math.random() * (WORLD_WIDTH - 10)) + 5;
+    const py = Math.floor(Math.random() * 25) + SURFACE_Y + 15; // Mid to deep
+    if (py >= WORLD_HEIGHT - 2) continue;
+    // Find a cave floor and fill with water
+    const poolW = Math.floor(Math.random() * 8) + 4;
+    for (let x = px; x < px + poolW && x < WORLD_WIDTH; x++) {
+      // Fill upward from the floor of a cave pocket
+      for (let dy = 0; dy < 3; dy++) {
+        const wy = py + dy;
+        if (wy < WORLD_HEIGHT && world[wy][x] === BLOCKS.AIR.id) {
+          world[wy][x] = BLOCKS.WATER.id;
+        }
+      }
+    }
+  }
+
+  // ===== STEP 7: Deep lava pools =====
+  // Dangerous! Found only in the deepest caves
+  for (let i = 0; i < 4; i++) {
+    const lx = Math.floor(Math.random() * (WORLD_WIDTH - 8)) + 4;
+    const ly = Math.floor(Math.random() * 15) + SURFACE_Y + 35; // Deep underground
+    if (ly >= WORLD_HEIGHT - 2) continue;
+    const lavaW = Math.floor(Math.random() * 6) + 3;
+    for (let x = lx; x < lx + lavaW && x < WORLD_WIDTH; x++) {
+      for (let dy = 0; dy < 2; dy++) {
+        const yy = ly + dy;
+        if (yy < WORLD_HEIGHT && world[yy][x] === BLOCKS.AIR.id) {
+          world[yy][x] = BLOCKS.LAVA.id;
+        }
+      }
+    }
+  }
+
+  // ===== STEP 8: Scatter ore and crystals in cave walls =====
+  // These reward exploration — rarer deeper down
+  for (let y = 0; y < WORLD_HEIGHT; y++) {
+    for (let x = 0; x < WORLD_WIDTH; x++) {
+      if (world[y][x] === BLOCKS.AIR.id || world[y][x] === BLOCKS.WATER.id || world[y][x] === BLOCKS.LAVA.id) continue;
+      const depth = y - heights[Math.min(x, WORLD_WIDTH - 1)];
+      if (depth < 5) continue;
+
+      // Check if this block is next to a cave (visible to player)
+      let nearCave = false;
+      for (let dy = -1; dy <= 1 && !nearCave; dy++) {
+        for (let dx = -1; dx <= 1 && !nearCave; dx++) {
+          const ny = y + dy, nx = x + dx;
+          if (ny >= 0 && ny < WORLD_HEIGHT && nx >= 0 && nx < WORLD_WIDTH) {
+            if (world[ny][nx] === BLOCKS.AIR.id) nearCave = true;
+          }
+        }
+      }
+      if (!nearCave) continue;
+
+      // Place ores based on depth and rarity
+      const roll = Math.random();
+      if (depth > 30 && roll < 0.03) {
+        world[y][x] = BLOCKS.GOLD.id;      // Gold — very deep, rare
+      } else if (depth > 20 && roll < 0.05) {
+        world[y][x] = BLOCKS.CRYSTAL.id;   // Crystal — deep, uncommon
+      } else if (depth > 10 && roll < 0.02) {
+        world[y][x] = BLOCKS.TORCH.id;     // Natural glowing torch — provides light
+      }
+    }
+  }
+
+  // ===== STEP 9: Stalactites and stalagmites =====
+  // Pointed rock formations that make caves look cool
+  for (let x = 2; x < WORLD_WIDTH - 2; x++) {
+    for (let y = SURFACE_Y + 5; y < WORLD_HEIGHT - 5; y++) {
+      // Stalactite: solid ceiling with air below
+      if (world[y][x] !== BLOCKS.AIR.id && world[y + 1][x] === BLOCKS.AIR.id) {
+        if (Math.random() < 0.06) {
+          const len = Math.floor(Math.random() * 3) + 1;
+          for (let d = 1; d <= len; d++) {
+            if (y + d < WORLD_HEIGHT && world[y + d][x] === BLOCKS.AIR.id) {
+              world[y + d][x] = BLOCKS.STONE.id;
+            } else break;
+          }
+        }
+      }
+      // Stalagmite: solid floor with air above
+      if (world[y][x] !== BLOCKS.AIR.id && y > 0 && world[y - 1][x] === BLOCKS.AIR.id) {
+        if (Math.random() < 0.06) {
+          const len = Math.floor(Math.random() * 3) + 1;
+          for (let d = 1; d <= len; d++) {
+            if (y - d >= 0 && world[y - d][x] === BLOCKS.AIR.id) {
+              world[y - d][x] = BLOCKS.STONE.id;
+            } else break;
+          }
+        }
+      }
+    }
+  }
+
+  // ===== STEP 10: Surface features (same as before) =====
+
+  // Sand patches on the surface
   for (let i = 0; i < 8; i++) {
     const sx = Math.floor(Math.random() * (WORLD_WIDTH - 10)) + 5;
     const len = Math.floor(Math.random() * 8) + 4;
     for (let x = sx; x < sx + len && x < WORLD_WIDTH; x++) {
       const surfaceH = heights[x];
-      world[surfaceH][x] = BLOCKS.SAND.id;
+      if (surfaceH < WORLD_HEIGHT) world[surfaceH][x] = BLOCKS.SAND.id;
       if (surfaceH + 1 < WORLD_HEIGHT) world[surfaceH + 1][x] = BLOCKS.SAND.id;
     }
   }
 
-  // Add palm trees
+  // Palm trees
   for (let i = 0; i < 15; i++) {
     const tx = Math.floor(Math.random() * (WORLD_WIDTH - 4)) + 2;
     const surfaceH = heights[tx];
-    // Only place tree if there's dirt/sand at surface
     if (world[surfaceH][tx] === BLOCKS.DIRT.id || world[surfaceH][tx] === BLOCKS.SAND.id) {
-      // Trunk (3-5 blocks tall)
       const trunkH = Math.floor(Math.random() * 3) + 3;
       for (let ty = 1; ty <= trunkH; ty++) {
         if (surfaceH - ty >= 0) world[surfaceH - ty][tx] = BLOCKS.WOOD.id;
       }
-      // Leaves (crown at top)
       const topY = surfaceH - trunkH;
       for (let dy = -1; dy <= 1; dy++) {
         for (let dx = -2; dx <= 2; dx++) {
           const lx = tx + dx, ly = topY + dy;
           if (lx >= 0 && lx < WORLD_WIDTH && ly >= 0 && ly < WORLD_HEIGHT) {
             if (world[ly][lx] === BLOCKS.AIR.id) {
-              // Skip corners for a rounder shape
               if (Math.abs(dx) === 2 && Math.abs(dy) === 1) continue;
               world[ly][lx] = BLOCKS.LEAVES.id;
             }
@@ -1048,24 +1330,55 @@ function generateWorld() {
     }
   }
 
-  // Add small crater lakes (water)
+  // Surface crater lakes
   for (let i = 0; i < 4; i++) {
     const lx = Math.floor(Math.random() * (WORLD_WIDTH - 12)) + 6;
     const lw = Math.floor(Math.random() * 6) + 4;
     for (let x = lx; x < lx + lw && x < WORLD_WIDTH; x++) {
       const surfaceH = heights[x];
-      // Dig a small crater and fill with water
       world[surfaceH][x] = BLOCKS.WATER.id;
-      if (surfaceH + 1 < WORLD_HEIGHT) {
-        world[surfaceH + 1][x] = BLOCKS.WATER.id;
-      }
+      if (surfaceH + 1 < WORLD_HEIGHT) world[surfaceH + 1][x] = BLOCKS.WATER.id;
     }
   }
 
-  // Place a Wood Sword somewhere on the surface for the player to find
+  // Place a Wood Sword on the surface
   const swordX = Math.floor(WORLD_WIDTH * 0.6);
   const swordSurfaceY = heights[swordX];
   swordPickup = { x: swordX, y: swordSurfaceY - 1, collected: false };
+
+  // Place item pickups in the world
+  itemPickups = [];
+
+  // Bow on the surface (between sword and spawn)
+  const bowX = Math.floor(WORLD_WIDTH * 0.4);
+  const bowSurfaceY = heights[bowX];
+  itemPickups.push({ x: bowX, y: bowSurfaceY - 1, itemId: 'bow', count: 1, collected: false });
+
+  // Arrows near the bow
+  const arrowX = bowX + 3;
+  const arrowSurfaceY = heights[arrowX];
+  itemPickups.push({ x: arrowX, y: arrowSurfaceY - 1, itemId: 'arrows', count: 15, collected: false });
+
+  // Health potions scattered in caves
+  // Find air blocks underground to place pickups
+  let potionsPlaced = 0;
+  let arrowsPlaced = 0;
+  for (let attempt = 0; attempt < 500 && (potionsPlaced < 4 || arrowsPlaced < 3); attempt++) {
+    const px = Math.floor(Math.random() * (WORLD_WIDTH - 10)) + 5;
+    const py = SURFACE_Y + 10 + Math.floor(Math.random() * (WORLD_HEIGHT - SURFACE_Y - 15));
+    if (py < WORLD_HEIGHT && px < WORLD_WIDTH &&
+        world[py][px] === BLOCKS.AIR.id &&
+        py + 1 < WORLD_HEIGHT && isSolid(px, py + 1)) {
+      if (potionsPlaced < 4 && Math.random() < 0.6) {
+        itemPickups.push({ x: px, y: py, itemId: 'health_potion', count: 1, collected: false });
+        potionsPlaced++;
+      } else if (arrowsPlaced < 3) {
+        const count = 10 + Math.floor(Math.random() * 11);
+        itemPickups.push({ x: px, y: py, itemId: 'arrows', count: count, collected: false });
+        arrowsPlaced++;
+      }
+    }
+  }
 }
 
 // ===== START GAME =====
@@ -1283,8 +1596,23 @@ function updatePlayer(dt) {
     const dx = player.x + player.width/2 - (swordPickup.x * TILE_SIZE + TILE_SIZE/2);
     const dy = player.y + player.height/2 - (swordPickup.y * TILE_SIZE + TILE_SIZE/2);
     if (Math.abs(dx) < TILE_SIZE * 1.5 && Math.abs(dy) < TILE_SIZE * 1.5) {
-      player.weapon = WEAPONS.WOOD_SWORD;
+      // Add sword as an item to inventory instead of directly equipping
+      addItemToInventory('wood_sword', 1);
+      player.weapon = getEquippedWeapon();
       swordPickup.collected = true;
+    }
+  }
+
+  // --- Pick up items (potions, arrows, bow, wand) ---
+  for (const pickup of itemPickups) {
+    if (pickup.collected) continue;
+    const dx = player.x + player.width/2 - (pickup.x * TILE_SIZE + TILE_SIZE/2);
+    const dy = player.y + player.height/2 - (pickup.y * TILE_SIZE + TILE_SIZE/2);
+    if (Math.abs(dx) < TILE_SIZE * 1.5 && Math.abs(dy) < TILE_SIZE * 1.5) {
+      if (addItemToInventory(pickup.itemId, pickup.count, pickup.charges)) {
+        pickup.collected = true;
+        player.weapon = getEquippedWeapon();
+      }
     }
   }
 
@@ -1359,7 +1687,7 @@ function resolveCollisionY() {
 function isSolid(x, y) {
   if (x < 0 || x >= WORLD_WIDTH || y < 0 || y >= WORLD_HEIGHT) return true; // World edges are solid
   const blockId = world[y][x];
-  if (blockId === BLOCKS.AIR.id || blockId === BLOCKS.WATER.id) return false;
+  if (blockId === BLOCKS.AIR.id || blockId === BLOCKS.WATER.id || blockId === BLOCKS.LAVA.id) return false;
   return true;
 }
 
@@ -1476,12 +1804,30 @@ window.saveCustomMob = function(mobData) {
 };
 
 function spawnMob() {
-  // Build combined spawn table from built-in + custom mobs
+  // Build spawn table with weights adjusted by player depth
+  // Deeper underground = more dangerous mobs!
   const spawnTable = [];
+  const playerTileY = Math.floor(player.y / TILE_SIZE);
+  const nearestSurface = findSurface(Math.floor(player.x / TILE_SIZE));
+  const playerDepth = playerTileY - nearestSurface; // Positive = underground
 
-  // Add built-in mobs
+  // Add built-in mobs with depth-adjusted weights
   for (const [type, def] of Object.entries(MOB_TYPES)) {
-    spawnTable.push({ type, weight: def.weight, custom: null });
+    let weight = def.weight;
+    if (playerDepth > 5) {
+      // Underground: boost skeletons and withers, reduce surface mobs
+      if (type === 'skeleton') weight *= 2.5;
+      if (type === 'wither')   weight *= 3;
+      if (type === 'crab')     weight *= 1.5;
+      if (type === 'shark')    weight *= 0.1;  // No sharks underground
+      if (type === 'dragon')   weight *= 0.2;  // Rare underground
+    }
+    if (playerDepth > 25) {
+      // Deep underground: even more withers
+      if (type === 'wither')   weight *= 2;
+      if (type === 'skeleton') weight *= 1.5;
+    }
+    spawnTable.push({ type, weight, custom: null });
   }
 
   // Add custom mobs
@@ -1503,15 +1849,29 @@ function spawnMob() {
   const spawnX = (camera.x + (side > 0 ? canvas.width + 80 : -80)) / TILE_SIZE;
   const tileX = Math.floor(Math.max(2, Math.min(spawnX, WORLD_WIDTH - 3)));
   const surfaceY = findSurface(tileX);
+  const isUnderground = playerDepth > 5;
+
+  // Skip flying mobs when player is underground — no room to fly
+  const mobTypeKey = chosen.custom ? (chosen.custom.type || 'ground') : chosen.type;
+  if (isUnderground && (mobTypeKey === 'dragon' || (chosen.custom && chosen.custom.type === 'flying'))) {
+    return; // Don't spawn flying mobs underground
+  }
+
+  // Find spawn Y position — surface or underground near the player
+  let spawnY;
+  if (isUnderground) {
+    // Find an air block near player's depth at the spawn X column
+    spawnY = findUndergroundSpawnY(tileX, playerTileY);
+    if (spawnY < 0) return; // No valid underground spot found
+  }
 
   let mob;
 
   if (chosen.custom) {
-    // Spawn a custom mob designed by the kids!
     const cm = chosen.custom;
     const speed = SPEED_VALUES[cm.speed] || 1.2;
-    const mobType = cm.type || 'ground';  // 'ground', 'flying', 'water'
-    const mobScale = cm.scale || 2;         // Size multiplier from Mob Builder
+    const mobType = cm.type || 'ground';
+    const mobScale = cm.scale || 2;
     const spriteW = (cm.width || 16) * mobScale;
     const spriteH = (cm.height || 16) * mobScale;
 
@@ -1524,9 +1884,9 @@ function spawnMob() {
       vy: 0,
       hp: cm.hp || 3,
       maxHp: cm.hp || 3,
-      damage: cm.damage || 1,
+      damage: cm.damage !== undefined ? cm.damage : 1,
       type: 'custom',
-      customData: cm,       // Reference to custom mob definition
+      customData: cm,
       hitTimer: 0,
       onGround: false,
       attackTimer: 0,
@@ -1534,8 +1894,9 @@ function spawnMob() {
       facing: side,
     };
 
-    // Position based on custom mob movement type
-    if (mobType === 'flying') {
+    if (isUnderground) {
+      mob.y = spawnY * TILE_SIZE - spriteH;
+    } else if (mobType === 'flying') {
       mob.y = (surfaceY - 10 - Math.floor(Math.random() * 5)) * TILE_SIZE;
     } else if (mobType === 'water') {
       let waterY = -1;
@@ -1548,7 +1909,6 @@ function spawnMob() {
       mob.y = (surfaceY - 2) * TILE_SIZE;
     }
   } else {
-    // Spawn a built-in mob
     const chosenType = chosen.type;
     const def = MOB_TYPES[chosenType];
 
@@ -1570,7 +1930,9 @@ function spawnMob() {
       facing: side,
     };
 
-    if (chosenType === 'dragon') {
+    if (isUnderground) {
+      mob.y = spawnY * TILE_SIZE - mob.height;
+    } else if (chosenType === 'dragon') {
       mob.y = (surfaceY - 10 - Math.floor(Math.random() * 5)) * TILE_SIZE;
     } else if (chosenType === 'shark') {
       let waterY = -1;
@@ -1585,6 +1947,23 @@ function spawnMob() {
   }
 
   mobs.push(mob);
+}
+
+// Find a valid underground air block to spawn a ground mob near the player's depth
+function findUndergroundSpawnY(tileX, targetY) {
+  // Scan up and down from the target depth looking for an air block with a solid floor
+  for (let offset = 0; offset < 15; offset++) {
+    for (const dir of [offset, -offset]) {
+      const y = targetY + dir;
+      if (y < 2 || y >= WORLD_HEIGHT - 1) continue;
+      if (tileX < 0 || tileX >= WORLD_WIDTH) continue;
+      // Need: this block is air, and the block below is solid (floor to stand on)
+      if (world[y][tileX] === BLOCKS.AIR.id && isSolid(tileX, y + 1)) {
+        return y + 1; // Return the floor Y (mob spawns on top)
+      }
+    }
+  }
+  return -1; // No valid spot found
 }
 
 function updateMobs(dt) {
@@ -1614,8 +1993,8 @@ function updateMobs(dt) {
     // Hit timer (flash red)
     if (mob.hitTimer > 0) mob.hitTimer -= ms;
 
-    // Damage player on contact (survival mode)
-    if (gameMode === 'survival' && player.invincibleTimer <= 0) {
+    // Damage player on contact (survival mode) — friendly mobs (0 damage) don't hurt
+    if (gameMode === 'survival' && player.invincibleTimer <= 0 && mob.damage > 0) {
       if (rectsOverlap(player, mob)) {
         damagePlayer(mob.damage - character.dmgMod);
         const kbDir = player.x < mob.x ? -1 : 1;
@@ -1944,8 +2323,8 @@ function updateCustomMob(mob, dt, ms) {
       mob.vx = (dx > 0 ? 1 : -1) * speed * 1.5;
       mob.facing = dx > 0 ? 1 : -1;
     }
-  } else if (behavior === 'ranged') {
-    // Shoot projectiles like skeleton
+  } else if (behavior === 'ranged' && mob.damage > 0) {
+    // Shoot projectiles like skeleton (friendly mobs don't shoot)
     mob.attackTimer += ms;
     const dx = player.x - mob.x;
     const dy = player.y - mob.y;
@@ -1999,6 +2378,38 @@ function updateProjectiles(dt) {
             size: 3,
           });
         }
+        projectiles.splice(i, 1);
+        continue;
+      }
+    }
+
+    // Check if player projectile hit a mob
+    if (p.owner === 'player') {
+      let hitMob = false;
+      for (let m = mobs.length - 1; m >= 0; m--) {
+        const mob = mobs[m];
+        if (p.x > mob.x && p.x < mob.x + mob.width &&
+            p.y > mob.y && p.y < mob.y + mob.height) {
+          mob.hp -= p.damage;
+          mob.hurtTimer = 200;
+          // Knockback
+          mob.vx = (p.vx > 0 ? 1 : -1) * 3;
+          // Hit particles
+          for (let j = 0; j < 4; j++) {
+            particles.push({
+              x: p.x, y: p.y,
+              vx: (Math.random() - 0.5) * 3,
+              vy: (Math.random() - 0.5) * 3,
+              life: 200,
+              color: p.type === 'fireball' ? '#f80' : '#f44',
+              size: 3,
+            });
+          }
+          hitMob = true;
+          break;
+        }
+      }
+      if (hitMob) {
         projectiles.splice(i, 1);
         continue;
       }
@@ -2092,14 +2503,17 @@ function playerAttack() {
           const dropId = mob.customData.dropBlockId;
           if (dropId !== undefined && dropId !== null) addToInventory(dropId);
         } else if (mob.type === 'wither') {
-          // Wither drops obsidian and heals player
+          // Wither drops obsidian + fire wand!
           addToInventory(BLOCKS.OBSIDIAN.id);
-          if (gameMode === 'survival') player.health = Math.min(player.health + 3, player.maxHealth);
+          addItemToInventory('fire_wand', 1, 30);
         } else if (mob.type === 'dragon') {
+          // Dragon drops gold block + health potion
           addToInventory(BLOCKS.GOLD.id);
-          if (gameMode === 'survival') player.health = Math.min(player.health + 2, player.maxHealth);
+          addItemToInventory('health_potion', 1);
         } else if (mob.type === 'skeleton') {
-          addToInventory(BLOCKS.STONE.id);
+          // Skeleton drops arrows (5-10)
+          const arrowCount = 5 + Math.floor(Math.random() * 6);
+          addItemToInventory('arrows', arrowCount);
         } else {
           // Crabs and sharks drop a random common block
           const drops = [BLOCKS.DIRT.id, BLOCKS.SAND.id, BLOCKS.STONE.id];
@@ -2239,9 +2653,9 @@ function placeBlock() {
   const blockRect = { x: tileX * TILE_SIZE, y: tileY * TILE_SIZE, width: TILE_SIZE, height: TILE_SIZE };
   if (rectsOverlap(player, blockRect)) return;
 
-  // Must have a block in the selected slot
+  // Must have a block (not an item) in the selected slot
   const slot = inventory[selectedSlot];
-  if (!slot || slot.count <= 0) return;
+  if (!slot || slot.count <= 0 || !slot.blockId) return;
 
   // Place the block
   world[tileY][tileX] = slot.blockId;
@@ -2272,6 +2686,189 @@ function addToInventory(blockId) {
   // Inventory full — drop on ground (for MVP we just lose it)
 }
 
+// Add an item (non-block) to inventory
+// Inventory slots can now hold: { blockId, count } OR { itemId, count, charges? }
+function addItemToInventory(itemId, count, charges) {
+  const item = ITEM_BY_ID[itemId];
+  if (!item) return false;
+  count = count || 1;
+
+  // Try to stack with existing (only if stackable)
+  if (item.maxStack > 1) {
+    for (let i = 0; i < inventory.length; i++) {
+      if (inventory[i] && inventory[i].itemId === itemId && inventory[i].count < item.maxStack) {
+        const add = Math.min(count, item.maxStack - inventory[i].count);
+        inventory[i].count += add;
+        count -= add;
+        if (count <= 0) return true;
+      }
+    }
+  }
+
+  // Find empty slot for remaining
+  while (count > 0) {
+    let placed = false;
+    for (let i = 0; i < inventory.length; i++) {
+      if (!inventory[i]) {
+        const add = Math.min(count, item.maxStack);
+        inventory[i] = { itemId: itemId, count: add };
+        if (charges !== undefined) inventory[i].charges = charges;
+        count -= add;
+        placed = true;
+        break;
+      }
+    }
+    if (!placed) return false; // Inventory full
+  }
+  return true;
+}
+
+// Use the currently selected item (F key or attack button)
+function useSelectedItem() {
+  const slot = inventory[selectedSlot];
+  if (!slot || !slot.itemId) return false;
+  const item = ITEM_BY_ID[slot.itemId];
+  if (!item) return false;
+
+  // --- Health Potion ---
+  if (item.id === 'health_potion') {
+    if (player.health >= player.maxHealth) return false; // Already full
+    const healAmount = 4; // Restores 4 hearts
+    player.health = Math.min(player.health + healAmount, player.maxHealth);
+    // Spawn healing particles (green sparkles!)
+    const px = player.x + player.width / 2;
+    const py = player.y + player.height / 2;
+    for (let i = 0; i < 10; i++) {
+      particles.push({
+        x: px + (Math.random() - 0.5) * 20,
+        y: py + (Math.random() - 0.5) * 30,
+        vx: (Math.random() - 0.5) * 2,
+        vy: -Math.random() * 3 - 1,
+        life: 600,
+        color: i % 2 === 0 ? '#4f4' : '#8f8',
+        size: 4,
+      });
+    }
+    // Use up the potion
+    slot.count--;
+    if (slot.count <= 0) inventory[selectedSlot] = null;
+    return true;
+  }
+
+  // --- Bow (shoot arrow) ---
+  if (item.id === 'bow') {
+    // Need arrows in inventory
+    const arrowSlot = inventory.findIndex(s => s && s.itemId === 'arrows' && s.count > 0);
+    if (arrowSlot < 0) return false; // No arrows!
+    if (player.attackCooldown > 0) return false;
+    player.attackCooldown = WEAPONS.BOW.speed;
+
+    // Determine direction — toward mouse if available, otherwise facing direction
+    let vx, vy;
+    const cx = player.x + player.width / 2;
+    const cy = player.y + player.height / 2;
+    if (mouse.worldX !== 0 || mouse.worldY !== 0) {
+      const dx = mouse.worldX - cx;
+      const dy = mouse.worldY - cy;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      const speed = 8;
+      vx = (dx / dist) * speed;
+      vy = (dy / dist) * speed;
+    } else {
+      // Touch/no-mouse: shoot in facing direction
+      vx = player.facing * 8;
+      vy = -2; // Slight upward arc
+    }
+
+    projectiles.push({
+      x: cx + player.facing * 10,
+      y: cy - 4,
+      vx: vx,
+      vy: vy,
+      type: 'arrow',
+      owner: 'player',
+      damage: WEAPONS.BOW.damage,
+      life: 3000,
+    });
+
+    // Use an arrow
+    inventory[arrowSlot].count--;
+    if (inventory[arrowSlot].count <= 0) inventory[arrowSlot] = null;
+    return true;
+  }
+
+  // --- Fire Wand (shoot fireball) ---
+  if (item.id === 'fire_wand') {
+    if (!slot.charges || slot.charges <= 0) {
+      // Wand is out of charges — it breaks!
+      inventory[selectedSlot] = null;
+      return false;
+    }
+    if (player.attackCooldown > 0) return false;
+    player.attackCooldown = WEAPONS.FIRE_WAND.speed;
+
+    // Fireballs travel in a straight line (no gravity)
+    let vx, vy;
+    const cx = player.x + player.width / 2;
+    const cy = player.y + player.height / 2;
+    if (mouse.worldX !== 0 || mouse.worldY !== 0) {
+      const dx = mouse.worldX - cx;
+      const dy = mouse.worldY - cy;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      const speed = 7;
+      vx = (dx / dist) * speed;
+      vy = (dy / dist) * speed;
+    } else {
+      vx = player.facing * 7;
+      vy = 0;
+    }
+
+    projectiles.push({
+      x: cx + player.facing * 12,
+      y: cy - 4,
+      vx: vx,
+      vy: vy,
+      type: 'fireball',
+      owner: 'player',
+      damage: WEAPONS.FIRE_WAND.damage,
+      life: 3000,
+    });
+
+    // Use a charge
+    slot.charges--;
+    if (slot.charges <= 0) {
+      // Wand breaks — spawn shatter particles
+      const px = player.x + player.width / 2;
+      const py = player.y + player.height / 2;
+      for (let i = 0; i < 6; i++) {
+        particles.push({
+          x: px, y: py,
+          vx: (Math.random() - 0.5) * 4,
+          vy: (Math.random() - 0.5) * 4,
+          life: 400,
+          color: '#f80',
+          size: 3,
+        });
+      }
+      inventory[selectedSlot] = null;
+    }
+    return true;
+  }
+
+  return false;
+}
+
+// Get the weapon for the currently selected hotbar slot
+function getEquippedWeapon() {
+  const slot = inventory[selectedSlot];
+  if (!slot) return WEAPONS.FIST;
+  if (slot.itemId) {
+    const item = ITEM_BY_ID[slot.itemId];
+    if (item && item.weapon) return item.weapon;
+  }
+  return WEAPONS.FIST;
+}
+
 // ===== PARTICLES =====
 function updateParticles(dt) {
   for (let i = particles.length - 1; i >= 0; i--) {
@@ -2298,6 +2895,9 @@ function draw() {
 
   // Draw sword pickup
   drawSwordPickup();
+
+  // Draw item pickups (potions, arrows, bow, wand)
+  drawItemPickups();
 
   // Draw mobs
   drawMobs();
@@ -2443,6 +3043,31 @@ function drawPlayer() {
     } else {
       ctx.fillRect(swordX, drawY + 16, 4, 24);
     }
+  } else if (player.weapon === WEAPONS.BOW) {
+    const bowX = player.facing > 0 ? drawX + 16 : drawX - 4;
+    ctx.strokeStyle = '#A0724A';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(bowX + 2, drawY + 24, 10, -Math.PI * 0.6, Math.PI * 0.6);
+    ctx.stroke();
+    ctx.strokeStyle = '#ccc';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(bowX + 2 + 10 * Math.cos(-Math.PI * 0.6), drawY + 24 + 10 * Math.sin(-Math.PI * 0.6));
+    ctx.lineTo(bowX + 2 + 10 * Math.cos(Math.PI * 0.6), drawY + 24 + 10 * Math.sin(Math.PI * 0.6));
+    ctx.stroke();
+  } else if (player.weapon === WEAPONS.FIRE_WAND) {
+    const wandX = player.facing > 0 ? drawX + 18 : drawX - 6;
+    ctx.fillStyle = '#A0724A';
+    ctx.fillRect(wandX, drawY + 14, 3, 18);
+    ctx.fillStyle = '#f80';
+    ctx.beginPath();
+    ctx.arc(wandX + 1, drawY + 12, 4, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = '#ff4';
+    ctx.beginPath();
+    ctx.arc(wandX + 1, drawY + 12, 2, 0, Math.PI * 2);
+    ctx.fill();
   } else if (attackAnim.active) {
     // Fist punch animation
     ctx.fillStyle = character.accent;
@@ -2479,6 +3104,21 @@ function drawMobs() {
       ctx.fillRect(barX, drawY - 10, barW, 5);
       ctx.fillStyle = mob.type === 'wither' ? '#a4f' : '#f44';
       ctx.fillRect(barX, drawY - 10, barW * (mob.hp / mob.maxHp), 5);
+    }
+
+    // Friendly indicator — small floating heart above 0-damage custom mobs
+    if (mob.damage === 0 && mob.type === 'custom') {
+      const heartBob = Math.sin(Date.now() * 0.003 + mob.x) * 2;
+      const hx = drawX + mob.width / 2 - 5;
+      const hy = drawY - 16 + heartBob;
+      ctx.fillStyle = '#f8a';
+      ctx.beginPath();
+      ctx.moveTo(hx + 5, hy + 9);
+      ctx.bezierCurveTo(hx + 5, hy + 7, hx, hy + 3, hx, hy + 5);
+      ctx.bezierCurveTo(hx, hy + 1, hx + 5, hy + 1, hx + 5, hy + 4);
+      ctx.bezierCurveTo(hx + 5, hy + 1, hx + 10, hy + 1, hx + 10, hy + 5);
+      ctx.bezierCurveTo(hx + 10, hy + 3, hx + 5, hy + 7, hx + 5, hy + 9);
+      ctx.fill();
     }
 
     ctx.restore();
@@ -2826,6 +3466,140 @@ function drawSwordPickup() {
   ctx.fill();
 }
 
+// Draw floating item pickups in the world
+function drawItemPickups() {
+  const bob = Math.sin(Date.now() * 0.004) * 4;
+  for (const pickup of itemPickups) {
+    if (pickup.collected) continue;
+    const drawX = pickup.x * TILE_SIZE - camera.x;
+    const drawY = pickup.y * TILE_SIZE - camera.y;
+    if (drawX < -40 || drawX > canvas.width + 40 || drawY < -40 || drawY > canvas.height + 40) continue;
+
+    ctx.save();
+    ctx.translate(drawX + TILE_SIZE / 2, drawY + TILE_SIZE / 2 + bob);
+
+    if (pickup.itemId === 'health_potion') {
+      ctx.fillStyle = '#f55';
+      ctx.fillRect(-5, -6, 10, 12);
+      ctx.fillStyle = '#faa';
+      ctx.fillRect(-3, -4, 6, 4);
+      ctx.fillStyle = '#888';
+      ctx.fillRect(-3, -8, 6, 3);
+      ctx.fillStyle = '#A0724A';
+      ctx.fillRect(-4, -9, 8, 2);
+    } else if (pickup.itemId === 'bow') {
+      ctx.strokeStyle = '#A0724A';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.arc(0, 0, 10, -Math.PI * 0.7, Math.PI * 0.7);
+      ctx.stroke();
+      ctx.strokeStyle = '#ccc';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(10 * Math.cos(-Math.PI * 0.7), 10 * Math.sin(-Math.PI * 0.7));
+      ctx.lineTo(10 * Math.cos(Math.PI * 0.7), 10 * Math.sin(Math.PI * 0.7));
+      ctx.stroke();
+    } else if (pickup.itemId === 'arrows') {
+      for (let a = -1; a <= 1; a++) {
+        ctx.fillStyle = '#A0724A';
+        ctx.fillRect(a * 3 - 1, -8, 2, 14);
+        ctx.fillStyle = '#888';
+        ctx.beginPath();
+        ctx.moveTo(a * 3, -8);
+        ctx.lineTo(a * 3 - 2, -5);
+        ctx.lineTo(a * 3 + 2, -5);
+        ctx.closePath();
+        ctx.fill();
+      }
+    } else if (pickup.itemId === 'fire_wand') {
+      ctx.fillStyle = '#A0724A';
+      ctx.fillRect(-2, -4, 4, 14);
+      ctx.fillStyle = '#f80';
+      ctx.beginPath();
+      ctx.arc(0, -6, 4, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#ff4';
+      ctx.beginPath();
+      ctx.arc(0, -6, 2, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    ctx.restore();
+
+    // Glow effect
+    ctx.beginPath();
+    ctx.arc(drawX + TILE_SIZE / 2, drawY + TILE_SIZE / 2 + bob, 16, 0, Math.PI * 2);
+    ctx.fillStyle = pickup.itemId === 'health_potion' ? 'rgba(255,100,100,0.12)' :
+                    pickup.itemId === 'fire_wand' ? 'rgba(255,160,0,0.12)' :
+                    'rgba(255,255,200,0.08)';
+    ctx.fill();
+  }
+}
+
+// Draw a small item icon at the given position (for hotbar slots)
+function drawItemIcon(ctx, x, y, size, itemId) {
+  const cx = x + size / 2;
+  const cy = y + size / 2;
+  ctx.save();
+
+  if (itemId === 'health_potion') {
+    ctx.fillStyle = '#f55';
+    ctx.fillRect(cx - 5, cy - 4, 10, 12);
+    ctx.fillStyle = '#faa';
+    ctx.fillRect(cx - 3, cy - 2, 6, 4);
+    ctx.fillStyle = '#888';
+    ctx.fillRect(cx - 3, cy - 7, 6, 3);
+    ctx.fillStyle = '#A0724A';
+    ctx.fillRect(cx - 4, cy - 8, 8, 2);
+  } else if (itemId === 'wood_sword') {
+    ctx.translate(cx, cy);
+    ctx.rotate(-Math.PI / 4);
+    ctx.fillStyle = '#888';
+    ctx.fillRect(-2, -10, 4, 12);
+    ctx.fillStyle = '#A0724A';
+    ctx.fillRect(-2, 2, 4, 6);
+    ctx.fillStyle = '#666';
+    ctx.fillRect(-4, 0, 8, 2);
+  } else if (itemId === 'bow') {
+    ctx.strokeStyle = '#A0724A';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(cx, cy, 8, -Math.PI * 0.7, Math.PI * 0.7);
+    ctx.stroke();
+    ctx.strokeStyle = '#ccc';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(cx + 8 * Math.cos(-Math.PI * 0.7), cy + 8 * Math.sin(-Math.PI * 0.7));
+    ctx.lineTo(cx + 8 * Math.cos(Math.PI * 0.7), cy + 8 * Math.sin(Math.PI * 0.7));
+    ctx.stroke();
+  } else if (itemId === 'arrows') {
+    for (let a = -1; a <= 1; a++) {
+      ctx.fillStyle = '#A0724A';
+      ctx.fillRect(cx + a * 3 - 1, cy - 6, 2, 12);
+      ctx.fillStyle = '#888';
+      ctx.beginPath();
+      ctx.moveTo(cx + a * 3, cy - 6);
+      ctx.lineTo(cx + a * 3 - 2, cy - 3);
+      ctx.lineTo(cx + a * 3 + 2, cy - 3);
+      ctx.closePath();
+      ctx.fill();
+    }
+  } else if (itemId === 'fire_wand') {
+    ctx.fillStyle = '#A0724A';
+    ctx.fillRect(cx - 2, cy - 2, 4, 12);
+    ctx.fillStyle = '#f80';
+    ctx.beginPath();
+    ctx.arc(cx, cy - 4, 4, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = '#ff4';
+    ctx.beginPath();
+    ctx.arc(cx, cy - 4, 2, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  ctx.restore();
+}
+
 // ===== HUD (Heads-Up Display) =====
 function drawHUD() {
   // --- Hearts (Survival mode) ---
@@ -2851,10 +3625,22 @@ function drawHUD() {
   ctx.font = '8px "Press Start 2P", monospace';
   ctx.fillText('Weapon: ' + player.weapon.name, 20, 72);
 
+  // --- Ammo / charges display ---
+  if (player.weapon === WEAPONS.BOW) {
+    const totalArrows = inventory.reduce((sum, s) => sum + (s && s.itemId === 'arrows' ? s.count : 0), 0);
+    ctx.fillStyle = totalArrows > 0 ? '#ffa' : '#f55';
+    ctx.fillText('Arrows: ' + totalArrows, 20, 88);
+  } else if (player.weapon === WEAPONS.FIRE_WAND) {
+    const slot = inventory[selectedSlot];
+    const charges = slot && slot.charges !== undefined ? slot.charges : 0;
+    ctx.fillStyle = charges > 10 ? '#f80' : '#f55';
+    ctx.fillText('Charges: ' + charges, 20, 88);
+  }
+
   // --- Flying indicator (Creative) ---
   if (player.flying && gameMode === 'creative') {
     ctx.fillStyle = '#53d8fb';
-    ctx.fillText('FLYING', 20, 88);
+    ctx.fillText('FLYING', 20, player.weapon.type !== 'melee' ? 104 : 88);
   }
 
   // --- Hotbar ---
@@ -2877,21 +3663,28 @@ function drawHUD() {
     ctx.lineWidth = i === selectedSlot ? 2 : 1;
     ctx.strokeRect(slotX, slotY, 38, 38);
 
-    // Draw block in slot
+    // Draw block or item in slot
     if (inventory[i]) {
-      const block = BLOCK_BY_ID[inventory[i].blockId];
-      if (block && block.color) {
-        ctx.fillStyle = block.color;
-        ctx.fillRect(slotX + 5, slotY + 5, 28, 28);
-        if (block.detail) {
-          ctx.fillStyle = block.detail;
-          ctx.fillRect(slotX + 9, slotY + 9, 8, 8);
+      if (inventory[i].blockId !== undefined) {
+        // It's a block
+        const block = BLOCK_BY_ID[inventory[i].blockId];
+        if (block && block.color) {
+          ctx.fillStyle = block.color;
+          ctx.fillRect(slotX + 5, slotY + 5, 28, 28);
+          if (block.detail) {
+            ctx.fillStyle = block.detail;
+            ctx.fillRect(slotX + 9, slotY + 9, 8, 8);
+          }
         }
+      } else if (inventory[i].itemId) {
+        // It's an item — draw a small icon
+        drawItemIcon(ctx, slotX + 5, slotY + 5, 28, inventory[i].itemId);
       }
-      // Stack count
+      // Stack count (show charges for wand)
       ctx.fillStyle = '#fff';
       ctx.font = '8px "Press Start 2P", monospace';
-      ctx.fillText(inventory[i].count, slotX + 20, slotY + 34);
+      const displayCount = inventory[i].charges !== undefined ? inventory[i].charges : inventory[i].count;
+      ctx.fillText(displayCount, slotX + 20, slotY + 34);
     }
 
     // Slot number
@@ -3149,9 +3942,10 @@ function respawnPlayer() {
 document.addEventListener('keydown', (e) => {
   keys[e.code] = true;
 
-  // Hotbar selection (keys 1-8)
+  // Hotbar selection (keys 1-8) — also updates equipped weapon
   if (e.code >= 'Digit1' && e.code <= 'Digit8') {
     selectedSlot = parseInt(e.code.charAt(5)) - 1;
+    player.weapon = getEquippedWeapon();
   }
 
   // Toggle physics stats
@@ -3177,8 +3971,13 @@ document.addEventListener('keydown', (e) => {
     e.preventDefault();
   }
 
-  // Attack
-  if (e.code === 'KeyF' && gameRunning) playerAttack();
+  // Attack / Use item
+  if (e.code === 'KeyF' && gameRunning) {
+    // Update weapon based on selected slot
+    player.weapon = getEquippedWeapon();
+    // Try using a consumable/ranged item first, then melee attack
+    if (!useSelectedItem()) playerAttack();
+  }
 
   // Double-tap jump for flying (Creative mode)
   if ((e.code === 'Space' || e.code === 'KeyW' || e.code === 'ArrowUp') && gameMode === 'creative' && gameRunning) {
@@ -3217,6 +4016,13 @@ canvas.addEventListener('mousedown', (e) => {
   }
   if (e.button === 0) {
     mouse.left = true;
+    // Update weapon from hotbar
+    player.weapon = getEquippedWeapon();
+    // If holding a ranged weapon or consumable, use it
+    const slot = inventory[selectedSlot];
+    if (slot && slot.itemId) {
+      if (useSelectedItem()) { mouse.left = false; return; }
+    }
     // Only attack if clicking near a mob; otherwise mine
     if (!tryAttackMobAtMouse()) {
       // mouse.left stays true so updateMining() handles it
@@ -3237,6 +4043,209 @@ canvas.addEventListener('mouseup', (e) => {
 // Prevent right-click context menu on canvas
 canvas.addEventListener('contextmenu', (e) => e.preventDefault());
 
+// =============================================================
+// TOUCH INPUT INTEGRATION
+// Maps on-screen touch controls to the existing keyboard/mouse
+// input system so the game works on iPads and tablets.
+// =============================================================
+
+// Detect if this is a touch device
+const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+
+// Track active touches for multi-touch support
+// Each key is a touch identifier, value describes what it controls
+const activeTouches = {};
+
+// Helper: simulate setting a key as pressed or released
+function touchSetKey(code, pressed) {
+  keys[code] = pressed;
+  // Handle special key logic that normally fires on keydown
+  if (pressed) {
+    if (code === 'Space' && gameMode === 'creative' && gameRunning) {
+      const now = Date.now();
+      if (now - player.lastJumpPress < 300) {
+        player.flying = !player.flying;
+        player.vy = 0;
+      }
+      player.lastJumpPress = now;
+    }
+  }
+}
+
+// Helper: find the block position in front of the player (for attack/place on touch)
+function getBlockInFront(rangeTiles) {
+  const cx = player.x + player.width / 2;
+  const cy = player.y + player.height / 2;
+  const targetX = cx + player.facing * TILE_SIZE * rangeTiles;
+  const targetY = cy;
+  return {
+    worldX: targetX,
+    worldY: targetY,
+    tileX: Math.floor(targetX / TILE_SIZE),
+    tileY: Math.floor(targetY / TILE_SIZE)
+  };
+}
+
+// Helper: check if a screen point is inside the hotbar and return slot index
+function getHotbarSlotAt(screenX, screenY) {
+  const hotbarWidth = 8 * 44 + 8;
+  const hotbarX = (canvas.width - hotbarWidth) / 2;
+  const hotbarY = canvas.height - 56;
+  if (screenX >= hotbarX && screenX <= hotbarX + hotbarWidth &&
+      screenY >= hotbarY && screenY <= hotbarY + 52) {
+    const slot = Math.floor((screenX - hotbarX - 6) / 44);
+    if (slot >= 0 && slot < 8) return slot;
+  }
+  return -1;
+}
+
+// Listen for touch events on the canvas (game area taps for targeting blocks)
+if (isTouchDevice) {
+  canvas.addEventListener('touchstart', (e) => {
+    if (!gameRunning) return;
+    for (const touch of e.changedTouches) {
+      const sx = touch.clientX;
+      const sy = touch.clientY;
+
+      // Check if tapping a hotbar slot
+      const slot = getHotbarSlotAt(sx, sy);
+      if (slot >= 0) {
+        selectedSlot = slot;
+        activeTouches[touch.identifier] = { type: 'hotbar' };
+        e.preventDefault();
+        continue;
+      }
+
+      // Check if tapping on the block palette
+      if (showBlockPalette) {
+        if (handlePaletteClick(sx, sy)) {
+          activeTouches[touch.identifier] = { type: 'palette' };
+          e.preventDefault();
+          continue;
+        }
+      }
+
+      // Otherwise, it's a canvas tap — set mouse position for mining/placing
+      // The touch-control buttons are handled via the overlay div (see frontend)
+      mouse.x = sx;
+      mouse.y = sy;
+      mouse.worldX = sx + camera.x;
+      mouse.worldY = sy + camera.y;
+
+      // Check if tapping near a mob to attack
+      if (tryAttackMobAtMouse()) {
+        activeTouches[touch.identifier] = { type: 'attack' };
+      } else {
+        // Start mining at touch position
+        mouse.left = true;
+        activeTouches[touch.identifier] = { type: 'mine' };
+      }
+      e.preventDefault();
+    }
+  }, { passive: false });
+
+  canvas.addEventListener('touchmove', (e) => {
+    if (!gameRunning) return;
+    for (const touch of e.changedTouches) {
+      const info = activeTouches[touch.identifier];
+      if (info && info.type === 'mine') {
+        // Update mouse position while holding to mine
+        mouse.x = touch.clientX;
+        mouse.y = touch.clientY;
+        mouse.worldX = touch.clientX + camera.x;
+        mouse.worldY = touch.clientY + camera.y;
+      }
+    }
+    e.preventDefault();
+  }, { passive: false });
+
+  canvas.addEventListener('touchend', (e) => {
+    for (const touch of e.changedTouches) {
+      const info = activeTouches[touch.identifier];
+      if (info && info.type === 'mine') {
+        mouse.left = false;
+      }
+      delete activeTouches[touch.identifier];
+    }
+    e.preventDefault();
+  }, { passive: false });
+
+  canvas.addEventListener('touchcancel', (e) => {
+    for (const touch of e.changedTouches) {
+      const info = activeTouches[touch.identifier];
+      if (info && info.type === 'mine') {
+        mouse.left = false;
+      }
+      delete activeTouches[touch.identifier];
+    }
+  });
+}
+
+// --- Touch Control Button Handlers ---
+// These functions are called by the touch overlay buttons (created by Frontend)
+// They map button presses to the existing input system.
+
+// D-pad: left/right movement and jump
+function touchDpadStart(direction) {
+  if (direction === 'left') touchSetKey('ArrowLeft', true);
+  if (direction === 'right') touchSetKey('ArrowRight', true);
+  if (direction === 'up') touchSetKey('Space', true);
+}
+
+function touchDpadEnd(direction) {
+  if (direction === 'left') touchSetKey('ArrowLeft', false);
+  if (direction === 'right') touchSetKey('ArrowRight', false);
+  if (direction === 'up') touchSetKey('Space', false);
+}
+
+// A button: Attack/Mine/Use — acts like left-click in front of player
+function touchAttackStart() {
+  if (!gameRunning) return;
+  player.weapon = getEquippedWeapon();
+  const target = getBlockInFront(2);
+  mouse.worldX = target.worldX;
+  mouse.worldY = target.worldY;
+  mouse.x = target.worldX - camera.x;
+  mouse.y = target.worldY - camera.y;
+  // If holding a ranged/consumable item, use it
+  const slot = inventory[selectedSlot];
+  if (slot && slot.itemId && useSelectedItem()) return;
+  // Try melee attack first, then mine
+  if (!tryAttackMobAtMouse()) {
+    mouse.left = true;
+  }
+}
+
+function touchAttackEnd() {
+  mouse.left = false;
+}
+
+// B button: Place block — acts like right-click in front of player
+function touchPlaceBlock() {
+  if (!gameRunning) return;
+  const target = getBlockInFront(2);
+  mouse.worldX = target.worldX;
+  mouse.worldY = target.worldY;
+  mouse.x = target.worldX - camera.x;
+  mouse.y = target.worldY - camera.y;
+  placeBlock();
+}
+
+// Pause button
+function touchPause() {
+  if (gameRunning) pauseGame();
+}
+
+// Inventory/Block palette toggle (E key)
+function touchToggleInventory() {
+  if (gameRunning) showBlockPalette = !showBlockPalette;
+}
+
+// Physics stats toggle (P key)
+function touchTogglePhysics() {
+  showPhysicsStats = !showPhysicsStats;
+}
+
 // Handle window resize
 window.addEventListener('resize', resizeCanvas);
 
@@ -3249,8 +4258,8 @@ resizeCanvas();
 // =============================================================
 
 // --- Pixel grid state ---
-const MB_GRID = 16;  // 16x16 pixel grid
-const MB_CELL = 16;  // Each cell is 16px on the editor canvas (16*16=256)
+let MB_GRID = 16;    // Grid dimension (8, 12, 16, or 20)
+let MB_CELL = 32;    // Each cell size on the editor canvas (512 / MB_GRID)
 let mbPixels = [];   // 2D array [y][x] = [r,g,b,a] or null
 let mbCurrentColor = [233, 69, 96, 255]; // Default: red
 let mbCurrentTool = 'paint';
@@ -3277,6 +4286,30 @@ function mbInitGrid() {
   }
 }
 mbInitGrid();
+
+// --- Change the pixel grid size (8, 12, 16, or 20) ---
+function mbChangeGridSize(newSize) {
+  const oldPixels = mbPixels;
+  const oldGrid = MB_GRID;
+  MB_GRID = newSize;
+  MB_CELL = Math.floor(512 / MB_GRID);
+  const canvas = document.getElementById('mobPixelCanvas');
+  if (canvas) {
+    canvas.width = MB_GRID * MB_CELL;
+    canvas.height = MB_GRID * MB_CELL;
+  }
+  mbInitGrid();
+  const copySize = Math.min(oldGrid, MB_GRID);
+  for (let y = 0; y < copySize; y++) {
+    for (let x = 0; x < copySize; x++) {
+      if (oldPixels[y] && oldPixels[y][x]) {
+        mbPixels[y][x] = oldPixels[y][x];
+      }
+    }
+  }
+  mbDrawEditor();
+  mbUpdatePreview();
+}
 
 // --- Build the color palette swatches ---
 function mbBuildPalette() {
@@ -3452,7 +4485,8 @@ function mbUpdatePreview() {
       `Speed: <span>${speed}</span><br>` +
       `Type: <span>${type}</span><br>` +
       `Behavior: <span>${behavior}</span><br>` +
-      `Size: <span>${sizeScale}x (${sizeScale * 16}px)</span>`;
+      `Grid: <span>${MB_GRID}x${MB_GRID}</span><br>` +
+      `Size: <span>${sizeScale}x (${sizeScale * MB_GRID}px)</span>`;
   }
 }
 
@@ -3513,12 +4547,15 @@ function mbSaveMob() {
 
   // Reset editor
   mbEditingId = null;
+  mbChangeGridSize(16);
+  document.getElementById('mbGridSize').value = '16';
   mbClearCanvas();
   document.getElementById('mbName').value = '';
   document.getElementById('mbHp').value = 3;
   document.getElementById('mbHpVal').textContent = '3';
   document.getElementById('mbDmg').value = 1;
   document.getElementById('mbDmgVal').textContent = '1';
+  document.getElementById('mbFriendlyTag').style.display = 'none';
   document.getElementById('mbSpeed').value = 'medium';
   document.getElementById('mbType').value = 'ground';
   document.getElementById('mbBehavior').value = 'patrol';
@@ -3558,18 +4595,24 @@ function mbEditMob(id) {
   document.getElementById('mbHpVal').textContent = mob.hp;
   document.getElementById('mbDmg').value = mob.damage;
   document.getElementById('mbDmgVal').textContent = mob.damage;
+  document.getElementById('mbFriendlyTag').style.display = mob.damage === 0 ? 'inline' : 'none';
   document.getElementById('mbSpeed').value = mob.speed;
   document.getElementById('mbSpawnRate').value = mob.spawnRate || 'uncommon';
   document.getElementById('mbDropBlock').value = mob.dropBlockId || 1;
   document.getElementById('mbScale').value = mob.scale || 2;
   document.getElementById('mbScaleVal').textContent = (mob.scale || 2) + 'x';
 
-  // Load pixels
-  mbInitGrid();
+  // Restore grid size
+  const mobGridSize = mob.width || 16;
+  document.getElementById('mbGridSize').value = mobGridSize;
+  mbChangeGridSize(mobGridSize);
+
+  // Load pixels using the mob's own width
+  const loadWidth = mob.width || 16;
   if (mob.pixels) {
     for (let i = 0; i < mob.pixels.length; i++) {
-      const x = i % MB_GRID;
-      const y = Math.floor(i / MB_GRID);
+      const x = i % loadWidth;
+      const y = Math.floor(i / loadWidth);
       mbPixels[y][x] = mob.pixels[i] ? [...mob.pixels[i]] : null;
     }
   }
@@ -3606,20 +4649,21 @@ function mbRefreshList() {
     const row = document.createElement('div');
     row.className = 'mb-mob-row';
 
-    // Create mini thumbnail
+    // Create thumbnail
     const thumbCanvas = document.createElement('canvas');
-    thumbCanvas.width = 32;
-    thumbCanvas.height = 32;
+    thumbCanvas.width = 80;
+    thumbCanvas.height = 80;
     thumbCanvas.className = 'mb-mob-thumb';
     const tctx = thumbCanvas.getContext('2d');
     tctx.imageSmoothingEnabled = false;
     if (mob.pixels) {
-      const s = 32 / MB_GRID; // 2px per pixel
+      const mobW = mob.width || 16;
+      const s = 80 / mobW;
       for (let i = 0; i < mob.pixels.length; i++) {
         const px = mob.pixels[i];
         if (px) {
-          const x = i % MB_GRID;
-          const y = Math.floor(i / MB_GRID);
+          const x = i % mobW;
+          const y = Math.floor(i / mobW);
           tctx.fillStyle = `rgba(${px[0]},${px[1]},${px[2]},${px[3]/255})`;
           tctx.fillRect(x * s, y * s, s, s);
         }
@@ -3628,13 +4672,15 @@ function mbRefreshList() {
 
     const info = document.createElement('div');
     info.className = 'mb-mob-info';
-    info.innerHTML = `${mob.name} <span class="mob-type-tag">${mob.type} / ${mob.behavior} / HP:${mob.hp} DMG:${mob.damage}</span>`;
+    info.innerHTML =
+      `<div class="mb-mob-name">${mob.name}</div>` +
+      `<div class="mb-mob-stats">${mob.type} / ${mob.behavior} / HP:${mob.hp} / ${mob.damage === 0 ? '<span style="color:#44d67f">Friendly</span>' : 'DMG:' + mob.damage} / ${mob.speed} / ${mob.width || 16}x${mob.height || 16}</div>`;
 
     const actions = document.createElement('div');
     actions.className = 'mb-mob-actions';
     actions.innerHTML =
-      `<button class="mb-tool-btn" onclick="mbEditMob('${mob.id}')">Edit</button>` +
-      `<button class="mb-tool-btn" onclick="mbDeleteMob('${mob.id}')" style="border-color:#e94560">Del</button>`;
+      `<button class="mb-tool-btn mb-list-btn" onclick="mbEditMob('${mob.id}')">Edit</button>` +
+      `<button class="mb-tool-btn mb-list-btn" onclick="mbDeleteMob('${mob.id}')" style="border-color:#e94560;color:#e94560">Del</button>`;
 
     row.appendChild(thumbCanvas);
     row.appendChild(info);
@@ -3676,5 +4722,80 @@ function mbClose() {
 mbBuildPalette();
 mbDrawEditor();
 </script>
+
+<!-- ===== TOUCH CONTROLS OVERLAY ===== -->
+<!-- On-screen buttons for iPad/tablet. Only shown on touch devices. -->
+<div id="touch-controls">
+
+  <!-- D-pad: left side of screen -->
+  <div class="touch-dpad">
+    <div class="touch-btn touch-btn-left" role="button" aria-label="Move left">&#9664;</div>
+    <div class="touch-btn touch-btn-right" role="button" aria-label="Move right">&#9654;</div>
+    <div class="touch-btn touch-btn-jump" role="button" aria-label="Jump">&#9650;</div>
+  </div>
+
+  <!-- Action buttons: right side of screen -->
+  <div class="touch-actions">
+    <div class="touch-btn touch-btn-a" role="button" aria-label="Attack / Mine">A<span class="touch-label" style="bottom:-16px;left:50%;transform:translateX(-50%)">MINE</span></div>
+    <div class="touch-btn touch-btn-b" role="button" aria-label="Place block">B<span class="touch-label" style="bottom:-16px;left:50%;transform:translateX(-50%)">PLACE</span></div>
+    <div class="touch-btn touch-btn-jump-r" role="button" aria-label="Jump">JUMP</div>
+  </div>
+
+  <!-- Utility buttons: top-right -->
+  <div class="touch-btn touch-btn-pause" role="button" aria-label="Pause">&#9208;</div>
+  <div class="touch-btn touch-btn-inv" role="button" aria-label="Inventory">E</div>
+  <div class="touch-btn touch-btn-physics" role="button" aria-label="Physics stats">P</div>
+</div>
+
+<script>
+// ===== TOUCH CONTROLS INIT =====
+// Wire up overlay buttons to Developer's touch handler functions.
+// Only show on touch-capable devices.
+(function() {
+  if (!window.isTouchDevice) return;
+
+  const overlay = document.getElementById('touch-controls');
+  overlay.style.display = 'block';
+
+  // Helper: prevent default and add pressed visual feedback
+  function bind(selector, startFn, endFn) {
+    const el = overlay.querySelector(selector);
+    if (!el) return;
+    el.addEventListener('touchstart', function(e) {
+      e.preventDefault();
+      el.classList.add('pressed');
+      if (startFn) startFn();
+    }, { passive: false });
+    el.addEventListener('touchend', function(e) {
+      e.preventDefault();
+      el.classList.remove('pressed');
+      if (endFn) endFn();
+    }, { passive: false });
+    el.addEventListener('touchcancel', function(e) {
+      el.classList.remove('pressed');
+      if (endFn) endFn();
+    });
+  }
+
+  // D-pad
+  bind('.touch-btn-left',  function(){ touchDpadStart('left'); },  function(){ touchDpadEnd('left'); });
+  bind('.touch-btn-right', function(){ touchDpadStart('right'); }, function(){ touchDpadEnd('right'); });
+  bind('.touch-btn-jump',  function(){ touchDpadStart('up'); },    function(){ touchDpadEnd('up'); });
+
+  // Action buttons
+  bind('.touch-btn-a', function(){ touchAttackStart(); }, function(){ touchAttackEnd(); });
+  bind('.touch-btn-b', function(){ touchPlaceBlock(); }, null);
+  bind('.touch-btn-jump-r', function(){ touchDpadStart('up'); }, function(){ touchDpadEnd('up'); });
+
+  // Utility buttons (tap only, no hold)
+  bind('.touch-btn-pause', function(){ touchPause(); }, null);
+  bind('.touch-btn-inv',   function(){ touchToggleInventory(); }, null);
+  bind('.touch-btn-physics', function(){ touchTogglePhysics(); }, null);
+
+  // Prevent the overlay from triggering browser gestures
+  overlay.addEventListener('touchmove', function(e) { e.preventDefault(); }, { passive: false });
+})();
+</script>
+
 </body>
 </html>

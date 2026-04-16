@@ -1,5 +1,5 @@
 /* ============================================
-   BlockWorld Explorer — UI Module
+   World Craft — UI Module
    Handles all menu screens, HUD, and overlays
    ============================================ */
 
@@ -191,7 +191,7 @@ function buildTitleScreenHTML() {
   return `
     <div id="title-screen" class="screen active">
       <div class="title-content">
-        <h1 class="game-title">BlockWorld<br>Explorer</h1>
+        <h1 class="game-title">World<br>Craft</h1>
         <p class="game-subtitle">A 2D Sandbox Adventure</p>
         <button id="btn-play" class="btn btn-gold">Play</button>
       </div>
