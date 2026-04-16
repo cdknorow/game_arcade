@@ -1018,6 +1018,18 @@ let attackAnim = { active: false, timer: 0, angle: 0 };
 function showScreen(id) {
   document.querySelectorAll('.overlay').forEach(el => el.classList.add('hidden'));
   if (id) document.getElementById(id).classList.remove('hidden');
+  // Hide touch controls on any menu screen, show only during gameplay
+  const tc = document.getElementById('touch-controls');
+  if (tc) tc.style.display = (id === null && gameRunning) ? 'block' : 'none';
+}
+
+function showTouchControls() {
+  const tc = document.getElementById('touch-controls');
+  if (tc) tc.style.display = 'block';
+}
+function hideTouchControls() {
+  const tc = document.getElementById('touch-controls');
+  if (tc) tc.style.display = 'none';
 }
 
 // ===== CHARACTER SELECT =====
@@ -1434,6 +1446,7 @@ function startGame(mode) {
   GRAVITY_ACCELERATION = NORMAL_GRAVITY * MOON_GRAVITY_MULTIPLIER;
 
   gameRunning = true;
+  showTouchControls();
   requestAnimationFrame(gameLoop);
 }
 
@@ -2549,6 +2562,7 @@ function damagePlayer(dmg) {
   if (player.health <= 0) {
     player.health = 0;
     gameRunning = false;
+    hideTouchControls();
     showScreen('deathScreen');
   }
 }
@@ -3877,6 +3891,7 @@ function handlePaletteClick(screenX, screenY) {
 // ===== PAUSE / RESUME / QUIT =====
 function pauseGame() {
   gameRunning = false;
+  hideTouchControls();
   document.getElementById('switchModeBtn').textContent =
     gameMode === 'survival' ? 'Switch to Creative' : 'Switch to Survival';
   showScreen('pauseMenu');
@@ -3886,6 +3901,7 @@ function resumeGame() {
   showScreen(null);
   document.querySelectorAll('.overlay').forEach(el => el.classList.add('hidden'));
   gameRunning = true;
+  showTouchControls();
   lastTime = performance.now();
   requestAnimationFrame(gameLoop);
 }
@@ -3917,6 +3933,7 @@ function switchMode() {
 function quitToMenu() {
   gameRunning = false;
   player.flying = false;
+  hideTouchControls();
   showScreen('titleScreen');
 }
 
@@ -3933,6 +3950,7 @@ function respawnPlayer() {
   showScreen(null);
   document.querySelectorAll('.overlay').forEach(el => el.classList.add('hidden'));
   gameRunning = true;
+  showTouchControls();
   lastTime = performance.now();
   requestAnimationFrame(gameLoop);
 }
@@ -4752,15 +4770,15 @@ mbDrawEditor();
 // Wire up overlay buttons to Developer's touch handler functions.
 // Only show on touch-capable devices.
 (function() {
-  if (!window.isTouchDevice) return;
-
   const overlay = document.getElementById('touch-controls');
-  overlay.style.display = 'block';
+  // Don't show on init — showTouchControls() is called when gameplay starts
+  overlay.style.display = 'none';
 
-  // Helper: prevent default and add pressed visual feedback
+  // Helper: bind touch AND mouse events for pressed visual feedback
   function bind(selector, startFn, endFn) {
     const el = overlay.querySelector(selector);
     if (!el) return;
+    // Touch events
     el.addEventListener('touchstart', function(e) {
       e.preventDefault();
       el.classList.add('pressed');
@@ -4772,6 +4790,21 @@ mbDrawEditor();
       if (endFn) endFn();
     }, { passive: false });
     el.addEventListener('touchcancel', function(e) {
+      el.classList.remove('pressed');
+      if (endFn) endFn();
+    });
+    // Mouse events (so desktop users can click on-screen buttons too)
+    el.addEventListener('mousedown', function(e) {
+      e.preventDefault();
+      el.classList.add('pressed');
+      if (startFn) startFn();
+    });
+    el.addEventListener('mouseup', function(e) {
+      e.preventDefault();
+      el.classList.remove('pressed');
+      if (endFn) endFn();
+    });
+    el.addEventListener('mouseleave', function(e) {
       el.classList.remove('pressed');
       if (endFn) endFn();
     });
