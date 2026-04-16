@@ -4485,6 +4485,31 @@ function mbFloodFill(x, y, targetColor, fillColor) {
   });
   canvas.addEventListener('mouseup', () => { mbIsDrawing = false; });
   canvas.addEventListener('mouseleave', () => { mbIsDrawing = false; });
+
+  // Touch events for iPad/tablet drawing (drag to paint)
+  function mbGetCellFromTouch(touch) {
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    const x = Math.floor((touch.clientX - rect.left) * scaleX / MB_CELL);
+    const y = Math.floor((touch.clientY - rect.top) * scaleY / MB_CELL);
+    return { x, y };
+  }
+  canvas.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    mbIsDrawing = true;
+    const { x, y } = mbGetCellFromTouch(e.touches[0]);
+    mbPaintCell(x, y);
+  }, { passive: false });
+  canvas.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+    if (!mbIsDrawing) return;
+    if (mbCurrentTool === 'fill') return;
+    const { x, y } = mbGetCellFromTouch(e.touches[0]);
+    mbPaintCell(x, y);
+  }, { passive: false });
+  canvas.addEventListener('touchend', () => { mbIsDrawing = false; });
+  canvas.addEventListener('touchcancel', () => { mbIsDrawing = false; });
 })();
 
 // --- Tool selection ---
