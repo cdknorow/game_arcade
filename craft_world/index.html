@@ -4217,7 +4217,23 @@ function touchDpadEnd(direction) {
 }
 
 // A button: Attack/Mine/Use — acts like left-click in front of player
+// A button: Mine only — targets block in front of player
 function touchAttackStart() {
+  if (!gameRunning) return;
+  const target = getBlockInFront(2);
+  mouse.worldX = target.worldX;
+  mouse.worldY = target.worldY;
+  mouse.x = target.worldX - camera.x;
+  mouse.y = target.worldY - camera.y;
+  mouse.left = true;
+}
+
+function touchAttackEnd() {
+  mouse.left = false;
+}
+
+// ATK button: Attack only — attacks nearest mob or uses ranged weapon, never mines
+function touchAttackOnly() {
   if (!gameRunning) return;
   player.weapon = getEquippedWeapon();
   const target = getBlockInFront(2);
@@ -4228,13 +4244,27 @@ function touchAttackStart() {
   // If holding a ranged/consumable item, use it
   const slot = inventory[selectedSlot];
   if (slot && slot.itemId && useSelectedItem()) return;
-  // Try melee attack first, then mine
-  if (!tryAttackMobAtMouse()) {
+  // Melee attack only — no mining fallback
+  tryAttackMobAtMouse();
+}
+
+// DIG button: Mine the block directly below the player's feet
+function touchMineDown() {
+  if (!gameRunning) return;
+  const belowX = Math.floor((player.x + player.width / 2) / TILE_SIZE);
+  const belowY = Math.floor((player.y + player.height) / TILE_SIZE) + 1;
+  if (belowY >= 0 && belowY < WORLD_HEIGHT && belowX >= 0 && belowX < WORLD_WIDTH) {
+    const targetWorldX = belowX * TILE_SIZE + TILE_SIZE / 2;
+    const targetWorldY = belowY * TILE_SIZE + TILE_SIZE / 2;
+    mouse.worldX = targetWorldX;
+    mouse.worldY = targetWorldY;
+    mouse.x = targetWorldX - camera.x;
+    mouse.y = targetWorldY - camera.y;
     mouse.left = true;
   }
 }
 
-function touchAttackEnd() {
+function touchMineDownEnd() {
   mouse.left = false;
 }
 
@@ -4754,7 +4784,9 @@ mbDrawEditor();
 
   <!-- Action buttons: right side of screen -->
   <div class="touch-actions">
-    <div class="touch-btn touch-btn-a" role="button" aria-label="Attack / Mine">A<span class="touch-label" style="bottom:-16px;left:50%;transform:translateX(-50%)">MINE</span></div>
+    <div class="touch-btn touch-btn-a" role="button" aria-label="Mine block" style="border-color:#4a9eff">A<span class="touch-label" style="bottom:-16px;left:50%;transform:translateX(-50%)">MINE</span></div>
+    <div class="touch-btn touch-btn-atk" role="button" aria-label="Attack mob" style="border-color:#ff4444">&#9876;<span class="touch-label" style="bottom:-16px;left:50%;transform:translateX(-50%)">ATK</span></div>
+    <div class="touch-btn touch-btn-dig" role="button" aria-label="Mine down" style="border-color:#cc8844">&#9660;<span class="touch-label" style="bottom:-16px;left:50%;transform:translateX(-50%)">DIG</span></div>
     <div class="touch-btn touch-btn-b" role="button" aria-label="Place block">B<span class="touch-label" style="bottom:-16px;left:50%;transform:translateX(-50%)">PLACE</span></div>
     <div class="touch-btn touch-btn-jump-r" role="button" aria-label="Jump">JUMP</div>
   </div>
@@ -4817,6 +4849,8 @@ mbDrawEditor();
 
   // Action buttons
   bind('.touch-btn-a', function(){ touchAttackStart(); }, function(){ touchAttackEnd(); });
+  bind('.touch-btn-atk', function(){ touchAttackOnly(); }, null);
+  bind('.touch-btn-dig', function(){ touchMineDown(); }, function(){ touchMineDownEnd(); });
   bind('.touch-btn-b', function(){ touchPlaceBlock(); }, null);
   bind('.touch-btn-jump-r', function(){ touchDpadStart('up'); }, function(){ touchDpadEnd('up'); });
 
