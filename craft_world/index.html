@@ -650,7 +650,8 @@ canvas {
 .touch-btn-jump-r{grid-area:jump;position:relative;width:auto;height:auto;border-color:rgba(83,216,251,0.6);color:rgba(83,216,251,0.9);font-size:10px}
 .touch-btn-pause{top:12px;right:12px;width:48px;height:48px;font-size:20px;border-radius:50%}
 .touch-btn-inv{top:12px;right:72px;width:48px;height:48px;font-size:14px;border-color:rgba(245,197,66,0.6)}
-.touch-btn-physics{top:12px;right:132px;width:40px;height:40px;font-size:12px;opacity:0.6}
+.touch-btn-mob{top:12px;right:132px;width:48px;height:48px;font-size:14px;border-color:rgba(126,87,194,0.6)}
+.touch-btn-physics{top:12px;right:192px;width:40px;height:40px;font-size:12px;opacity:0.6}
 .touch-label{position:absolute;font-family:var(--font-pixel);font-size:7px;color:rgba(255,255,255,0.45);pointer-events:none}
 </style>
 </head>
@@ -4797,6 +4798,7 @@ mbDrawEditor();
   <!-- Utility buttons: top-right -->
   <div class="touch-btn touch-btn-pause" role="button" aria-label="Pause">&#9208;</div>
   <div class="touch-btn touch-btn-inv" role="button" aria-label="Inventory">E</div>
+  <div class="touch-btn touch-btn-mob" role="button" aria-label="Spawn mob">M</div>
   <div class="touch-btn touch-btn-physics" role="button" aria-label="Physics stats">P</div>
 </div>
 
@@ -4860,6 +4862,7 @@ mbDrawEditor();
   // Utility buttons (tap only, no hold)
   bind('.touch-btn-pause', function(){ touchPause(); }, null);
   bind('.touch-btn-inv',   function(){ touchToggleInventory(); }, null);
+  bind('.touch-btn-mob',   function(){ if (gameRunning && gameMode === 'survival') spawnMob(); }, null);
   bind('.touch-btn-physics', function(){ touchTogglePhysics(); }, null);
 
   // Prevent the overlay from triggering browser gestures
