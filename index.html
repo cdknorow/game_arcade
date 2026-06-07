@@ -129,6 +129,14 @@
                 <span class="play-badge">Play Now</span>
             </div>
         </a>
+        <a class="card" href="snowy_mountains/index.html">
+            <canvas id="snowy-preview" width="400" height="200"></canvas>
+            <div class="card-body">
+                <h2>Snowy Mountains</h2>
+                <p>Generate snowy peaks, drift through cloud layers, and trigger lava-filled volcanic eruptions.</p>
+                <span class="play-badge">Play Now</span>
+            </div>
+        </a>
         <a class="card" href="wings_of_fire/index.html">
             <canvas id="wings-preview" width="400" height="200"></canvas>
             <div class="card-body">
@@ -228,6 +236,86 @@
                 ctx.fillRect(ex + Math.cos(angle) * dist, ey + Math.sin(angle) * dist, ps, ps);
             }
             ctx.globalAlpha = 1;
+        })();
+
+        // --- Snowy Mountains preview ---
+        (function () {
+            const c = document.getElementById('snowy-preview');
+            const ctx = c.getContext('2d');
+            const W = c.width, H = c.height;
+
+            const sky = ctx.createLinearGradient(0, 0, 0, H);
+            sky.addColorStop(0, '#8fd2ee');
+            sky.addColorStop(0.62, '#d9f2fb');
+            sky.addColorStop(1, '#f5fbff');
+            ctx.fillStyle = sky;
+            ctx.fillRect(0, 0, W, H);
+
+            // clouds
+            ctx.fillStyle = 'rgba(255,255,255,0.82)';
+            [[70, 46, 56, 14], [230, 36, 72, 18], [330, 72, 52, 13]].forEach(([x, y, w, h]) => {
+                ctx.beginPath();
+                ctx.ellipse(x, y, w, h, 0, 0, Math.PI * 2);
+                ctx.ellipse(x - w * 0.35, y + 3, w * 0.34, h * 0.9, 0, 0, Math.PI * 2);
+                ctx.ellipse(x + w * 0.32, y + 2, w * 0.38, h, 0, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            // distant ridges
+            ctx.fillStyle = '#9fb9c4';
+            ctx.beginPath();
+            ctx.moveTo(0, H);
+            ctx.lineTo(0, 138); ctx.lineTo(58, 100); ctx.lineTo(122, 126);
+            ctx.lineTo(185, 86); ctx.lineTo(250, 118); ctx.lineTo(320, 96);
+            ctx.lineTo(W, 132); ctx.lineTo(W, H);
+            ctx.fill();
+
+            // main snowy mountain
+            ctx.fillStyle = '#dae9ed';
+            ctx.beginPath();
+            ctx.moveTo(38, H);
+            ctx.lineTo(190, 44);
+            ctx.lineTo(360, H);
+            ctx.closePath();
+            ctx.fill();
+
+            ctx.fillStyle = '#ffffff';
+            ctx.beginPath();
+            ctx.moveTo(190, 44);
+            ctx.lineTo(142, 116);
+            ctx.lineTo(170, 103);
+            ctx.lineTo(190, 130);
+            ctx.lineTo(210, 101);
+            ctx.lineTo(244, 122);
+            ctx.closePath();
+            ctx.fill();
+
+            ctx.fillStyle = '#65747a';
+            ctx.beginPath();
+            ctx.moveTo(190, 44);
+            ctx.lineTo(174, 88);
+            ctx.lineTo(206, 88);
+            ctx.closePath();
+            ctx.fill();
+
+            // lava eruption
+            for (let i = 0; i < 55; i++) {
+                const angle = -Math.PI / 2 + (Math.random() - 0.5) * 1.75;
+                const dist = 12 + Math.random() * 68;
+                const x = 190 + Math.cos(angle) * dist;
+                const y = 76 + Math.sin(angle) * dist;
+                const s = 2 + Math.random() * 4;
+                ctx.fillStyle = ['#ff3d1f', '#ff8a00', '#ffe04f'][Math.floor(Math.random() * 3)];
+                ctx.globalAlpha = 0.62 + Math.random() * 0.38;
+                ctx.fillRect(x, y, s, s);
+            }
+            ctx.globalAlpha = 1;
+
+            // foreground snow
+            ctx.fillStyle = '#eef9fc';
+            ctx.fillRect(0, H - 34, W, 34);
+            ctx.fillStyle = '#c9e4ec';
+            ctx.fillRect(0, H - 34, W, 3);
         })();
 
         // --- Wings of Fire preview ---

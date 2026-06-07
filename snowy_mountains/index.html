@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Snowy Mountains</title>
+    <link rel="stylesheet" href="styles.css?v=3" />
+  </head>
+  <body>
+    <main id="app">
+      <section id="world" aria-label="Snowy Mountains game">
+        <canvas id="scene"></canvas>
+
+        <div class="panel builder" aria-label="Mountain builder">
+          <label>
+            <span>Mountain name</span>
+            <input id="mountainName" maxlength="28" value="Sprinkle Peak" />
+          </label>
+          <label>
+            <span>Describe it</span>
+            <textarea id="mountainPrompt" rows="3" maxlength="160">tall soft snowy mountain with sparkly ridges and a safe valley</textarea>
+          </label>
+          <button id="buildButton" type="button">Build Mountain</button>
+          <button id="eruptionButton" class="eruption-button" type="button">Erupt Volcano</button>
+        </div>
+
+        <div id="debugPanel" class="panel debug-panel" aria-label="Debug terrain controls" hidden>
+          <div class="debug-header">
+            <strong>Debug Tuning</strong>
+            <label class="debug-auto">
+              <input id="debugAutoRebuild" type="checkbox" checked />
+              <span>Auto</span>
+            </label>
+          </div>
+          <div id="debugControls" class="debug-controls"></div>
+          <div class="debug-actions">
+            <button id="debugRebuild" type="button">Rebuild</button>
+            <button id="debugReset" type="button">Reset</button>
+          </div>
+        </div>
+
+        <div class="panel status" aria-live="polite">
+          <strong id="currentName">Sprinkle Peak</strong>
+          <span id="hint">WASD/arrows: walk. Drag: look. Space: hop.</span>
+        </div>
+
+        <div class="crosshair" aria-hidden="true"></div>
+      </section>
+    </main>
+
+    <script>
+      window.addEventListener("error", (event) => {
+        const hint = document.querySelector("#hint");
+        if (hint) hint.textContent = `Error: ${event.message}`;
+      });
+      window.addEventListener("unhandledrejection", (event) => {
+        const hint = document.querySelector("#hint");
+        if (hint) hint.textContent = `Error: ${event.reason && event.reason.message ? event.reason.message : event.reason}`;
+      });
+    </script>
+    <script type="module" src="main.js?v=3"></script>
+  </body>
+</html>
