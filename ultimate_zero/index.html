@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ultimate Zero</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main class="shell">
+      <section class="topbar" aria-label="Game status">
+        <div>
+          <h1>Ultimate Zero</h1>
+          <p id="statusText">Select a level</p>
+        </div>
+        <div class="stats" aria-live="polite">
+          <span id="attempts">Attempts 0</span>
+          <span id="progress">0%</span>
+          <span id="verifierStatus">Verifier pending</span>
+        </div>
+      </section>
+
+      <section class="tuning" aria-label="Level tuning">
+        <label for="difficultySlider">
+          Jump error
+          <strong id="difficultyValue">140 ms / 59 px</strong>
+        </label>
+        <input id="difficultySlider" type="range" min="60" max="240" step="10" value="140">
+      </section>
+
+      <section class="stage-wrap" aria-label="Game">
+        <canvas id="gameCanvas" width="1280" height="720" aria-label="Ultimate Zero game canvas"></canvas>
+
+        <div id="levelSelector" class="overlay">
+          <div class="selector">
+            <div class="selector-copy">
+              <span class="eyebrow">Level select</span>
+              <h2>Choose your run</h2>
+            </div>
+            <button class="level-card" id="startLevel" type="button">
+              <span class="level-number">01</span>
+              <span>
+                <strong>Pulse Corridor</strong>
+                <small id="levelSummary">Verified jumps, tuned spacing, and a clean finish.</small>
+              </span>
+            </button>
+          </div>
+        </div>
+
+        <div id="messagePanel" class="message-panel hidden" aria-live="assertive">
+          <strong id="messageTitle">Ready</strong>
+          <span id="messageBody">Press Space to jump.</span>
+          <div class="message-actions">
+            <button id="retryButton" type="button">Retry</button>
+            <button id="menuButton" type="button">Levels</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="controls" aria-label="Controls">
+        <span>Space / Click / Tap: jump</span>
+        <span>R: restart</span>
+        <span>Esc: level select</span>
+      </section>
+    </main>
+
+    <script src="game.js"></script>
+  </body>
+</html>

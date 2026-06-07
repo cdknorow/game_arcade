@@ -137,6 +137,14 @@
                 <span class="play-badge">Play Now</span>
             </div>
         </a>
+        <a class="card" href="ultimate_zero/index.html">
+            <canvas id="ultimate-zero-preview" width="400" height="200"></canvas>
+            <div class="card-body">
+                <h2>Ultimate Zero</h2>
+                <p>Dash through verified jump corridors, platform chains, pillars, saws, and rhythm hazards.</p>
+                <span class="play-badge">Play Now</span>
+            </div>
+        </a>
         <a class="card" href="wings_of_fire/index.html">
             <canvas id="wings-preview" width="400" height="200"></canvas>
             <div class="card-body">
@@ -429,6 +437,113 @@
                 ctx.fillRect(200 + Math.random() * 100, 50 + Math.random() * 80, 2, 2);
             }
             ctx.globalAlpha = 1;
+        })();
+
+        // --- Ultimate Zero preview ---
+        (function () {
+            const c = document.getElementById('ultimate-zero-preview');
+            const ctx = c.getContext('2d');
+            const W = c.width, H = c.height;
+            const ground = 152;
+
+            const sky = ctx.createLinearGradient(0, 0, 0, H);
+            sky.addColorStop(0, '#172225');
+            sky.addColorStop(0.65, '#15191b');
+            sky.addColorStop(1, '#101112');
+            ctx.fillStyle = sky;
+            ctx.fillRect(0, 0, W, H);
+
+            ctx.strokeStyle = '#273236';
+            ctx.lineWidth = 2;
+            for (let x = 0; x <= W; x += 48) {
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, ground);
+                ctx.stroke();
+            }
+            for (let y = 24; y < ground; y += 48) {
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(W, y);
+                ctx.stroke();
+            }
+
+            ctx.fillStyle = '#20282b';
+            ctx.fillRect(0, ground, W, H - ground);
+            ctx.strokeStyle = '#12c8d8';
+            ctx.lineWidth = 4;
+            ctx.beginPath();
+            ctx.moveTo(0, ground);
+            ctx.lineTo(W, ground);
+            ctx.stroke();
+
+            // cube
+            ctx.save();
+            ctx.translate(74, ground - 25);
+            ctx.rotate(-0.18);
+            ctx.fillStyle = '#12c8d8';
+            ctx.fillRect(-22, -22, 44, 44);
+            ctx.strokeStyle = '#f4f7f8';
+            ctx.lineWidth = 4;
+            ctx.strokeRect(-22, -22, 44, 44);
+            ctx.fillStyle = '#071012';
+            ctx.fillRect(-12, -9, 8, 8);
+            ctx.fillRect(7, -9, 8, 8);
+            ctx.fillStyle = '#a9e84f';
+            ctx.fillRect(-12, 10, 25, 5);
+            ctx.restore();
+
+            // spike
+            ctx.fillStyle = '#ff4d5e';
+            ctx.beginPath();
+            ctx.moveTo(126, ground);
+            ctx.lineTo(148, ground - 54);
+            ctx.lineTo(170, ground);
+            ctx.closePath();
+            ctx.fill();
+            ctx.strokeStyle = '#ffd247';
+            ctx.lineWidth = 3;
+            ctx.stroke();
+
+            // pillar
+            ctx.fillStyle = '#29343a';
+            ctx.fillRect(205, 102, 58, ground - 102);
+            ctx.fillStyle = '#a9e84f';
+            ctx.fillRect(205, 102, 58, 8);
+            ctx.strokeStyle = '#15191b';
+            ctx.lineWidth = 3;
+            ctx.strokeRect(205, 102, 58, ground - 102);
+
+            // floating platform
+            ctx.fillStyle = '#263035';
+            ctx.fillRect(290, 78, 84, 24);
+            ctx.fillStyle = '#a9e84f';
+            ctx.fillRect(290, 78, 84, 8);
+            ctx.strokeStyle = '#15191b';
+            ctx.lineWidth = 3;
+            ctx.strokeRect(290, 78, 84, 24);
+
+            // saw
+            ctx.save();
+            ctx.translate(328, ground - 29);
+            ctx.rotate(0.35);
+            ctx.fillStyle = '#ff4d5e';
+            ctx.beginPath();
+            for (let i = 0; i < 28; i++) {
+                const r = i % 2 === 0 ? 25 : 18;
+                const a = (i / 28) * Math.PI * 2;
+                const x = Math.cos(a) * r;
+                const y = Math.sin(a) * r;
+                if (i === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            }
+            ctx.closePath();
+            ctx.fill();
+            ctx.fillStyle = '#ffd247';
+            ctx.beginPath();
+            ctx.arc(0, 0, 9, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
         })();
     </script>
 </body>
