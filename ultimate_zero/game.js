@@ -2,7 +2,7 @@ const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
 const levelSelector = document.getElementById("levelSelector");
-const startLevelButton = document.getElementById("startLevel");
+const levelList = document.getElementById("levelList");
 const messagePanel = document.getElementById("messagePanel");
 const messageTitle = document.getElementById("messageTitle");
 const messageBody = document.getElementById("messageBody");
@@ -13,7 +13,6 @@ const progressEl = document.getElementById("progress");
 const verifierStatusEl = document.getElementById("verifierStatus");
 const difficultySlider = document.getElementById("difficultySlider");
 const difficultyValue = document.getElementById("difficultyValue");
-const levelSummary = document.getElementById("levelSummary");
 const statusText = document.getElementById("statusText");
 
 const WORLD = {
@@ -57,6 +56,53 @@ const CONTINUATIONS = {
   finalMix: [{ kind: "double" }, { kind: "sawGate" }]
 };
 
+const LEVEL_NAMES = [
+  "Pulse Corridor",
+  "Neon Steps",
+  "Sawtooth Sprint",
+  "Pillar Garden",
+  "Signal Drop",
+  "Chrome Rise",
+  "Hazard Relay",
+  "Grid Runner",
+  "Cyan Cascade",
+  "Spike Clock",
+  "Static Bridge",
+  "Vault Circuit",
+  "Echo Platforms",
+  "Solar Teeth",
+  "Binary Climb",
+  "Rhythm Locks",
+  "Greenline Rush",
+  "Ion Gallery",
+  "Gate Sequence",
+  "Prism Run",
+  "Machine Steps",
+  "Glitch Pillars",
+  "Sawline Drift",
+  "Tower Signal",
+  "Overdrive Path",
+  "Frame Skip",
+  "Zero Hour",
+  "Hard Reset",
+  "Final Voltage",
+  "Ultimate Line"
+];
+
+const LEVEL_DEFINITIONS = LEVEL_NAMES.map((name, index) => {
+  const levelNumber = index + 1;
+  return {
+    id: levelNumber,
+    name,
+    seed: 1807 + levelNumber * 977,
+    extraSeeds: Math.floor(index / 4),
+    platformChance: Math.min(0.46, 0.24 + (index % 6) * 0.035),
+    pillarChance: Math.min(0.58, 0.24 + (index % 7) * 0.045),
+    spacing: 1 + Math.min(0.2, index * 0.006),
+    label: levelNumber.toString().padStart(2, "0")
+  };
+});
+
 const player = {
   x: 235,
   y: WORLD.ground - 52,
@@ -69,6 +115,9 @@ const player = {
 const state = {
   screen: "menu",
   level: null,
+  levelDefinition: LEVEL_DEFINITIONS[0],
+  levelIndex: 0,
+  levelCache: new Map(),
   verification: null,
   timingMarginMs: Number(difficultySlider.value),
   cameraX: 0,
@@ -99,17 +148,36 @@ function pick(list, rng) {
   return list[Math.floor(rng() * list.length)];
 }
 
-function makeBlueprintSequence() {
-  const rng = makeRng(1931 + state.timingMarginMs * 17);
+function makeBlueprintSequence(levelDefinition) {
+  const rng = makeRng(levelDefinition.seed + state.timingMarginMs * 17);
   const sequence = [];
+  const seeds = [...BLUEPRINT_SEEDS];
+  const insertable = [
+    { kind: "double" },
+    { kind: "saw" },
+    { kind: "gate" },
+    { kind: "miniWave" },
+    { kind: "ceilingTap" },
+    { kind: "platform" },
+    { kind: "block", width: 70, height: 76 }
+  ];
 
-  for (let seedIndex = 0; seedIndex < BLUEPRINT_SEEDS.length; seedIndex += 1) {
-    const seed = BLUEPRINT_SEEDS[seedIndex];
+  for (let i = 0; i < levelDefinition.extraSeeds; i += 1) {
+    const insertAt = 2 + Math.floor(rng() * Math.max(1, seeds.length - 3));
+    seeds.splice(insertAt, 0, { ...pick(insertable, rng) });
+  }
+
+  for (let seedIndex = 0; seedIndex < seeds.length; seedIndex += 1) {
+    const seed = seeds[seedIndex];
+    if (seed.kind !== "platform" && rng() < levelDefinition.platformChance * 0.22) {
+      sequence.push({ kind: "platform" });
+    }
+
     sequence.push({ ...seed });
 
     let current = seed.kind;
     let repeats = 0;
-    while (shouldContinueChunk(seed.kind, repeats, rng)) {
+    while (shouldContinueChunk(seed.kind, repeats, rng, levelDefinition)) {
       const next = pick(CONTINUATIONS[current] ?? CONTINUATIONS.double, rng);
       sequence.push({ ...next });
       current = next.kind;
@@ -120,14 +188,14 @@ function makeBlueprintSequence() {
   return sequence;
 }
 
-function shouldContinueChunk(kind, repeats, rng) {
+function shouldContinueChunk(kind, repeats, rng, levelDefinition) {
   if (kind === "platform") {
     if (repeats < 2) return true;
     const chance = Math.max(0.15, 0.75 - (repeats - 2) * 0.1);
     return repeats < 8 && rng() < chance;
   }
 
-  return repeats < 3 && rng() < 0.5;
+  return repeats < 3 && rng() < 0.42 + levelDefinition.extraSeeds * 0.025;
 }
 
 function makeSpike(x, w = 54, h = 64) {
@@ -146,16 +214,16 @@ function makeCeilingBlock(x, width, y, height = 54) {
   return { type: "block", role: "ceiling", x, y, w: width, h: height };
 }
 
-function makePlatform(source, x, rng) {
+function makePlatform(source, x, rng, levelDefinition) {
   const hard = difficultyRatio();
-  const isPillar = rng() < 0.36;
+  const isPillar = rng() < levelDefinition.pillarChance;
   const width = isPillar ? 82 + rng() * 48 : 176 + rng() * 58 + (1 - hard) * 24;
   const climb = source.type === "ground" ? 58 + rng() * 28 : -34 + rng() * 78;
   const y = Math.max(430, Math.min(535, source.y - climb));
   return { type: isPillar ? "pillar" : "platform", x, y, w: width, h: isPillar ? WORLD.ground - y : 34 };
 }
 
-function makeChallenge(blueprint, x, surface, rng) {
+function makeChallenge(blueprint, x, surface, rng, levelDefinition) {
   const hard = difficultyRatio();
   const hazards = [];
   const platforms = [];
@@ -214,7 +282,7 @@ function makeChallenge(blueprint, x, surface, rng) {
   }
 
   if (blueprint.kind === "platform") {
-    const platform = makePlatform(surface, x, rng);
+    const platform = makePlatform(surface, x, rng, levelDefinition);
     platforms.push(platform);
     scenery.push({ type: "platformGlow", platform });
   }
@@ -223,9 +291,9 @@ function makeChallenge(blueprint, x, surface, rng) {
   return { x, end, hazards, platforms, scenery, sourceSurface: surface };
 }
 
-function makeLevel() {
+function makeLevel(levelDefinition) {
   const requiredPx = marginPx();
-  const rng = makeRng(811 + state.timingMarginMs * 31);
+  const rng = makeRng(levelDefinition.seed * 3 + state.timingMarginMs * 31);
   const hazards = [];
   const platforms = [];
   const scenery = [];
@@ -234,8 +302,8 @@ function makeLevel() {
   let surface = { type: "ground", x: -Infinity, end: Infinity, y: WORLD.ground };
   let x = 780;
 
-  for (const blueprint of makeBlueprintSequence()) {
-    const group = makeChallenge(blueprint, x, surface, rng);
+  for (const blueprint of makeBlueprintSequence(levelDefinition)) {
+    const group = makeChallenge(blueprint, x, surface, rng, levelDefinition);
     challengeGroups.push(group);
     hazards.push(...group.hazards);
     platforms.push(...group.platforms);
@@ -247,7 +315,7 @@ function makeLevel() {
       surface = { type: "platform", x: platform.x, end: platform.x + platform.w, y: platform.y };
       x = platform.x + platform.w + 120 + requiredPx * 0.75;
     } else {
-      x = group.end + 360 + requiredPx * 1.45 + (group.hazards.length > 2 ? 80 : 0);
+      x = group.end + (360 + requiredPx * 1.45 + (group.hazards.length > 2 ? 80 : 0)) * levelDefinition.spacing;
       if (surface.type === "platform" && x - surface.end > 520) {
         surface = { type: "ground", x: -Infinity, end: Infinity, y: WORLD.ground };
       }
@@ -255,8 +323,9 @@ function makeLevel() {
   }
 
   return {
-    id: 1,
-    name: "Pulse Corridor",
+    id: levelDefinition.id,
+    name: levelDefinition.name,
+    label: levelDefinition.label,
     length: x + 620,
     hazards,
     platforms,
@@ -584,9 +653,9 @@ function verifyLevel(level, requiredPx) {
   };
 }
 
-function tuneLevelForMargin() {
+function tuneLevelForMargin(levelDefinition) {
   const requiredPx = marginPx();
-  let level = makeLevel();
+  let level = makeLevel(levelDefinition);
 
   for (let pass = 0; pass < 16; pass += 1) {
     const verification = verifyLevel(level, requiredPx);
@@ -650,8 +719,16 @@ function tuneLevelForMargin() {
   return { level, verification: verifyLevel(level, requiredPx), passes: 16 };
 }
 
-function rebuildLevel() {
-  const tuned = tuneLevelForMargin();
+function levelCacheKey(levelDefinition) {
+  return `${levelDefinition.id}:${state.timingMarginMs}`;
+}
+
+function rebuildLevel(levelIndex = state.levelIndex) {
+  state.levelIndex = levelIndex;
+  state.levelDefinition = LEVEL_DEFINITIONS[levelIndex];
+  const cacheKey = levelCacheKey(state.levelDefinition);
+  const tuned = state.levelCache.get(cacheKey) ?? tuneLevelForMargin(state.levelDefinition);
+  state.levelCache.set(cacheKey, tuned);
   state.level = tuned.level;
   state.verification = tuned.verification;
 
@@ -659,9 +736,37 @@ function rebuildLevel() {
   difficultyValue.textContent = `${state.timingMarginMs} ms / ${px} px`;
   const verdict = state.verification.ok ? "Verified" : "Needs tuning";
   verifierStatusEl.textContent = `${verdict} ${state.verification.reports.length} jumps / ${state.verification.platformReports.length} platforms / ${state.verification.platformExitReports.length} exits`;
-  levelSummary.textContent = `${verdict}: ${state.level.challengeGroups.length} generated chunks, tightest window ${Math.round(state.verification.tightestWindowPx)} px.`;
+  statusText.textContent = state.screen === "menu" ? `Selected ${state.level.label} ${state.level.name}` : state.level.name;
+  updateLevelCards();
   resetPlayer();
   updateHud();
+}
+
+function renderLevelSelector() {
+  levelList.innerHTML = "";
+
+  for (const levelDefinition of LEVEL_DEFINITIONS) {
+    const button = document.createElement("button");
+    button.className = "level-card";
+    button.type = "button";
+    button.dataset.levelIndex = String(levelDefinition.id - 1);
+    button.innerHTML = `
+      <span class="level-number">${levelDefinition.label}</span>
+      <span>
+        <strong>${levelDefinition.name}</strong>
+        <small>Seeded run with ${levelDefinition.extraSeeds + 13} base chunks, verified on play.</small>
+      </span>
+    `;
+    levelList.appendChild(button);
+  }
+
+  updateLevelCards();
+}
+
+function updateLevelCards() {
+  for (const card of levelList.querySelectorAll(".level-card")) {
+    card.classList.toggle("selected", Number(card.dataset.levelIndex) === state.levelIndex);
+  }
 }
 
 function resetPlayer() {
@@ -674,7 +779,10 @@ function resetPlayer() {
   state.completed = false;
 }
 
-function startLevel() {
+function startLevel(levelIndex = state.levelIndex) {
+  if (levelIndex !== state.levelIndex || !state.level) {
+    rebuildLevel(levelIndex);
+  }
   state.screen = "playing";
   state.attempts += 1;
   resetPlayer();
@@ -1071,11 +1179,16 @@ function loop(timestamp) {
   requestAnimationFrame(loop);
 }
 
-startLevelButton.addEventListener("click", startLevel);
-retryButton.addEventListener("click", startLevel);
+levelList.addEventListener("click", (event) => {
+  const card = event.target.closest(".level-card");
+  if (!card) return;
+  startLevel(Number(card.dataset.levelIndex));
+});
+retryButton.addEventListener("click", () => startLevel());
 menuButton.addEventListener("click", openMenu);
 difficultySlider.addEventListener("input", () => {
   state.timingMarginMs = Number(difficultySlider.value);
+  state.levelCache.clear();
   const wasPlaying = state.screen === "playing";
   rebuildLevel();
   if (wasPlaying) {
@@ -1101,5 +1214,6 @@ window.addEventListener("keydown", (event) => {
   }
 });
 
+renderLevelSelector();
 rebuildLevel();
 requestAnimationFrame(loop);
